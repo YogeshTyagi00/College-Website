@@ -11,61 +11,30 @@ import { useAuthStore } from '../store/authStore.js';
 import Footer from '../components/Footer.jsx';
 import Header from '../components/Header.jsx';
 import HeroSection from '../components/HeroSection.jsx';
+import EventsPage from './EventsPage.jsx';
 
 const DashboardPage = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
 
-  const { newsinfo: newsData, fetchNews, societiesinfo: societiesData, fetchSocieties } = useAuthStore();
+  const { newsinfo: newsData, fetchNews, societiesinfo: societiesData, fetchSocieties, eventsinfo:mockEvents, fetchEvents } = useAuthStore();
   useEffect(() => {
     fetchNews();
     fetchSocieties();
+    fetchEvents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
   const navigate = useNavigate();
 
-
-  // Simplified Mock Data for Dashboard sections (replace with actual data fetching if available)
-  // For demo purposes, we'll slice from the fetched data or provide placeholders
   const featuredNews = (newsData || []).filter(article => article.featured).slice(0, 2); // Show 2 featured news
   const latestNews = (newsData || []).filter(article => !article.featured).slice(0, 4); // Show 4 latest news
 
-  // Dummy data for events and announcements as they weren't in useAuthStore previously
-  const mockEvents = [
-    {
-      id: 'event1',
-      title: 'Annual Tech Fest: InnovateX',
-      date: '2025-07-28T10:00:00Z',
-      location: 'College Auditorium',
-      description: 'A grand celebration of technology and innovation, featuring hackathons, workshops, and expert talks.',
-      imageUrl: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=800&h=400&fit=crop',
-      category: 'tech-fest',
-    },
-    {
-      id: 'event2',
-      title: 'Cultural Night: Fusion Fiesta',
-      date: '2025-08-10T18:00:00Z',
-      location: 'Open Air Theatre',
-      description: 'An evening showcasing diverse cultural performances including dance, music, and drama.',
-      imageUrl: 'https://images.unsplash.com/photo-1541530342-9905953046a7?q=80&w=800&h=400&fit=crop',
-      category: 'cultural',
-    },
-    {
-      id: 'event3',
-      title: 'Sports Day: Inter-College Tournament',
-      date: '2025-08-25T09:00:00Z',
-      location: 'College Sports Ground',
-      description: 'Annual sports day with various competitions for students across different colleges.',
-      imageUrl: 'https://images.unsplash.com/photo-1549476461-a0833a6473e0?q=80&w=800&h=400&fit=crop',
-      category: 'sports',
-    },
-  ];
-  const upcomingEvents = mockEvents.slice(0, 3); // Show 3 upcoming events
+  const upcomingEvents = (mockEvents || []).slice(0, 3); // Show 3 upcoming events
 
-  const popularSocieties = (societiesData || []).slice(0, 4); // Show 4 popular societies
+  const popularSocieties = (societiesData || []).slice(0, 4); // Show 4 societies
 
-  const mockAnnouncements = [
+/*   const mockAnnouncements = [
     {
       id: 'annc1',
       title: 'Urgent: Exam Schedule Changes',
@@ -81,7 +50,7 @@ const DashboardPage = () => {
       date: '2025-06-20T14:00:00Z',
     },
   ];
-  const urgentAnnouncements = mockAnnouncements.filter(announcement => announcement.priority === 'high');
+  const urgentAnnouncements = mockAnnouncements.filter(announcement => announcement.priority === 'high'); */
 
   // Helper to get image for category (reused from CollegeNewsPage)
   const getImageForCategory = (category) => {
@@ -137,7 +106,7 @@ const DashboardPage = () => {
   const DashboardEventCard = ({ event }) => (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] flex flex-col h-full cursor-pointer"
       onClick={() => navigate('/events')}> {/* Direct to news/events page, as events are grouped with news for now */}
-      <img src={event.imageUrl} alt={event.title} className="w-full h-36 object-cover" />
+      <img src={getImageForCategory(event.category)} alt={event.title} className="w-full h-36 object-cover" />
       <div className="p-4 flex flex-col justify-between flex-grow">
         <div>
           <h3 className="font-semibold text-gray-900 text-lg mb-2 line-clamp-2">{event.title}</h3>
@@ -186,10 +155,10 @@ const DashboardPage = () => {
           <div className="space-y-15 pb-20">
 
             {/* Hero Section */}
-            <HeroSection />
+            <HeroSection/>
 
             {/* Urgent Announcements */}
-            {urgentAnnouncements.length > 0 && (
+            {/* {urgentAnnouncements.length > 0 && (
               <section className="animate-fade-in mt-25">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
                   <Bell className="w-6 h-6 mr-2 text-red-500" /> Urgent Announcements
@@ -206,12 +175,12 @@ const DashboardPage = () => {
                   ))}
                 </div>
               </section>
-            )}
+            )} */}
 
             {/* Featured News */}
             {featuredNews.length > 0 && (
               <section className="animate-fade-in">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-6 mt-20">
                   <h2 className="text-2xl font-bold text-gray-900 flex items-center">
                     <Newspaper className="w-6 h-6 mr-2 text-blue-500" /> Featured News
                   </h2>
@@ -233,7 +202,7 @@ const DashboardPage = () => {
             {/* Latest News Grid */}
             {latestNews.length > 0 && (
               <section className="animate-fade-in">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Latest Updates</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 mt-20">Latest Updates</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {latestNews.map((article) => (
                     <DashboardNewsCard key={article._id?.$oid || article._id} article={article} />
@@ -307,8 +276,8 @@ const DashboardPage = () => {
                     <div className="bg-white/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-green-300">
                       <Calendar className="w-8 h-8" />
                     </div>
-                    <div className="text-4xl font-bold mb-2">20+</div>
-                    <div className="text-gray-200">Events</div>
+                    <div className="text-4xl font-bold mb-2">50+</div>
+                    <div className="text-gray-200">Events & Activities</div>
                   </div>
                   <div className="text-center">
                     <div className="bg-white/10 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-teal-300">
@@ -333,6 +302,7 @@ const DashboardPage = () => {
         {/* Conditional rendering of full pages */}
         {activeTab === 'societies' && <SocietyPage />}
         {activeTab === 'news' && <NewsPage />}
+        {activeTab === 'events' && <EventsPage />}
       </main>
       <Footer />
     </div>

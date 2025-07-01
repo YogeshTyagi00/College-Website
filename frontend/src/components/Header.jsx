@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { TrendingUp, Users, Newspaper, LogOut } from 'lucide-react';
+import { TrendingUp, Users, Newspaper, LogOut, Calendar } from 'lucide-react';
 import { useAuthStore } from "../store/authStore.js";
 
 const Header = ({ activeTab }) => {
@@ -34,7 +34,7 @@ const Header = ({ activeTab }) => {
                             <button
                                 onClick={() => navigate('/news')}
                                 className={`flex items-center px-6 py-3 rounded-full text-lg font-semibold transition-all duration-300 shadow-md transform ${activeTab === 'news'
-                                        ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white scale-105 shadow-xl'
+                                        ? 'bg-gradient-to-r from-teal-300 to-blue-400 text-white scale-105 shadow-xl'
                                         : 'bg-white text-gray-700 hover:bg-gray-100 hover:shadow-lg border border-gray-200'
                                     }`}
                             >
@@ -42,9 +42,19 @@ const Header = ({ activeTab }) => {
                             </button>
 
                             <button
+                                onClick={() => navigate('/events')}
+                                className={`flex items-center px-6 py-3 rounded-full text-lg font-semibold transition-all duration-300 shadow-md transform ${activeTab === 'events'
+                                        ? 'bg-gradient-to-r from-yellow-300 to-amber-600 text-white scale-105 shadow-xl'
+                                        : 'bg-white text-gray-700 hover:bg-gray-100 hover:shadow-lg border border-gray-200'
+                                    }`}
+                            >
+                                <Calendar className="w-5 h-5 mr-2" /> Events
+                            </button>
+
+                            <button
                                 onClick={() => navigate('/society')}
                                 className={`flex items-center px-6 py-3 rounded-full text-lg font-semibold transition-all duration-300 shadow-md transform ${activeTab === 'societies'
-                                        ? 'bg-gradient-to-r from-teal-500 to-green-500 text-white scale-105 shadow-xl'
+                                        ? 'bg-gradient-to-r from-teal-400 to-green-400 text-white scale-105 shadow-xl'
                                         : 'bg-white text-gray-700 hover:bg-gray-100 hover:shadow-lg border border-gray-200'
                                     }`}
                             >

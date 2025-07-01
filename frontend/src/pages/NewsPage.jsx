@@ -278,7 +278,7 @@ const NewsPage = () => {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <div className="mb-8 lg:mb-0">
                 <h1 className="text-5xl font-bold text-gray-900 mb-3">
-                  Campus <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">News</span>
+                  Campus <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-500">News</span>
                 </h1>
                 <p className="text-gray-600 text-xl">Stay updated with the latest happenings around campus</p>
               </div>
@@ -310,7 +310,7 @@ const NewsPage = () => {
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
                     className={`flex items-center px-5 py-3 rounded-full font-medium transition-all duration-200 shadow-sm hover:shadow-md ${selectedCategory === category.id
-                        ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg transform scale-105'
+                        ? 'bg-gradient-to-r from-teal-500 to-blue-600 text-white shadow-lg transform scale-105'
                         : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                       }`}
                   >

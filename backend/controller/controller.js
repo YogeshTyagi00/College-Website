@@ -33,7 +33,7 @@ export const getnews = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 }    
-export const events = async (req, res) => {
+export const createevents = async (req, res) => {
     try {
         const { title, description, date, time, location, category, registrationLink, registrationDeadline, organizer } = req.body;
 
@@ -53,6 +53,15 @@ export const events = async (req, res) => {
         res.status(201).json({ message: "Event created successfully", eventItem });
     } catch (error) {
         console.error("Error creating event:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+export const getevents = async (req, res) => {
+    try {
+        const eventItems = await UserEvents.find().sort({ createdAt: -1 });
+        res.status(200).json(eventItems);
+    } catch (error) {
+        console.error("Error fetching event items:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 }

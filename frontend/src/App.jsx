@@ -10,6 +10,7 @@ import SocietyPage from "./pages/SocietyPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
 import { useAuthStore } from "./store/authStore.js";
 import LoginPage from "./pages/LoginPage.jsx";
+import EventsPage from "./pages/EventsPage.jsx";
 
 //protect authenticated routes from being accessed by unauthenticated users
 const ProtectedRoute = ({ children }) => {
@@ -58,12 +59,12 @@ function App() {
               <SocietyPage />
             </ProtectedRoute>
           } />
-          {/* 
+           
         <Route path="/events" element={
           <ProtectedRoute>
             <EventsPage />
           </ProtectedRoute>
-          } /> */}
+          } /> 
 
           <Route path="/signup" element={
             <RedirectAuthenticatedUser>

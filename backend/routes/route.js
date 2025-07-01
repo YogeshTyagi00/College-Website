@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { events, createnews, getnews, createsociety, getsociety,signup, checkAuth, login, logout} from '../controller/controller.js';
+import { createevents, createnews, getnews, createsociety, getsociety,signup, checkAuth, login, logout, getevents} from '../controller/controller.js';
 import { verifyToken } from '../middleware/verifyToken.js';
 
 
@@ -16,7 +16,8 @@ router.post('/logout',logout);
 router.post('/news',createnews);
 router.get('/news',getnews);
 
-router.post('/events', events);
+router.post('/events', createevents);
+router.get('/events', getevents);
 
 router.post('/society',createsociety);
 router.get('/society',getsociety);

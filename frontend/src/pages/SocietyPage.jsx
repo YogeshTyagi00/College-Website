@@ -75,6 +75,7 @@ const SocietyPage = () => {
   // Get image for category
   const getImageForCategory = (category) => {
     const images = {
+      'sports': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=800&h=400&fit=crop',
       'technical': 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=800&h=400&fit=crop',
       'cultural': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=400&fit=crop',
       'business': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop',
