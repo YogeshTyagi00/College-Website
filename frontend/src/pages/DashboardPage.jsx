@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { LogOut, Newspaper, Users, ArrowRight, Bell, Calendar, TrendingUp, Award, Clock, Star, ChevronDown } from 'lucide-react';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+
 
 import SocietyPage from './SocietyPage';
 import NewsPage from './NewsPage';
@@ -12,11 +12,12 @@ import Footer from '../components/Footer.jsx';
 import Header from '../components/Header.jsx';
 import HeroSection from '../components/HeroSection.jsx';
 import EventsPage from './EventsPage.jsx';
+import getImageForCategory from '../components/Image.jsx';
 
 const DashboardPage = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
 
-  const { newsinfo: newsData, fetchNews, societiesinfo: societiesData, fetchSocieties, eventsinfo:mockEvents, fetchEvents } = useAuthStore();
+  const { newsinfo: newsData, fetchNews, societiesinfo: societiesData, fetchSocieties, eventsinfo: mockEvents, fetchEvents } = useAuthStore();
   useEffect(() => {
     fetchNews();
     fetchSocieties();
@@ -33,42 +34,6 @@ const DashboardPage = () => {
   const upcomingEvents = (mockEvents || []).slice(0, 3); // Show 3 upcoming events
 
   const popularSocieties = (societiesData || []).slice(0, 4); // Show 4 societies
-
-/*   const mockAnnouncements = [
-    {
-      id: 'annc1',
-      title: 'Urgent: Exam Schedule Changes',
-      content: 'Please check the revised examination schedule on the student portal. Some changes have been made to accommodate new policies. This is a critical update.',
-      priority: 'high',
-      date: '2025-06-25T09:00:00Z',
-    },
-    {
-      id: 'annc2',
-      title: 'Important: Internship Application Deadline Extended',
-      content: 'The deadline for all summer internship applications has been extended to July 5th, 2025. Submit your applications promptly.',
-      priority: 'high', // Setting to high for demonstration
-      date: '2025-06-20T14:00:00Z',
-    },
-  ];
-  const urgentAnnouncements = mockAnnouncements.filter(announcement => announcement.priority === 'high'); */
-
-  // Helper to get image for category (reused from CollegeNewsPage)
-  const getImageForCategory = (category) => {
-    const images = {
-      'tech-fest': 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=400&fit=crop',
-      'sports': 'https://images.unsplash.com/photo-1593013820725-ca0b6076576f?w=800&h=400&fit=crop',
-      'academic': 'https://images.unsplash.com/photo-1537495329792-41ae41ad3bf0?w=800&h=400&fit=crop',
-      'campus': 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=400&fit=crop',
-      'event': 'https://plus.unsplash.com/premium_photo-1661306437817-8ab34be91e0c??w=800&h=400&fit=crop',
-      'technical': 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=800&h=400&fit=crop',
-      'cultural': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=400&fit=crop',
-      'business': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop',
-      'creative': 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=400&fit=crop',
-      'social': 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&h=400&fit=crop',
-      'all': 'https://images.unsplash.com/photo-1478147493297-c0f5855d0124?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-    };
-    return images[category] || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=400&fit=crop';
-  };
 
   // Simplified NewsCard for Dashboard view
   const DashboardNewsCard = ({ article, featured = false }) => {
@@ -155,27 +120,7 @@ const DashboardPage = () => {
           <div className="space-y-15 pb-20">
 
             {/* Hero Section */}
-            <HeroSection/>
-
-            {/* Urgent Announcements */}
-            {/* {urgentAnnouncements.length > 0 && (
-              <section className="animate-fade-in mt-25">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                  <Bell className="w-6 h-6 mr-2 text-red-500" /> Urgent Announcements
-                </h2>
-                <div className="space-y-4">
-                  {urgentAnnouncements.map((announcement) => (
-                    <div key={announcement.id} className="border border-red-200 bg-red-50 text-red-800 p-4 rounded-lg flex items-start space-x-3 shadow-sm">
-                      <Bell className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <span className="font-semibold">{announcement.title}:</span>{' '}
-                        {announcement.content}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )} */}
+            <HeroSection />
 
             {/* Featured News */}
             {featuredNews.length > 0 && (
@@ -220,7 +165,7 @@ const DashboardPage = () => {
                       <Calendar className="w-6 h-6 mr-2 text-purple-600" /> Upcoming Events
                     </h2>
                     <button
-                      onClick={() => navigate('/events')} 
+                      onClick={() => navigate('/events')}
                       className="flex items-center text-purple-600 hover:text-purple-800 font-medium transition-colors"
                     >
                       View All Events <ArrowRight className="ml-2 h-4 w-4" />

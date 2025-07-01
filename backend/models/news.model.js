@@ -16,7 +16,7 @@ const newsSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ["tech-fest", "sports", "event", "academic","campus"],
+        enum: ["tech-festE", "sportsE", "eventE", "academicE","campusE"],
         required: true
     },
     publishedAt: {
@@ -26,7 +26,7 @@ const newsSchema = new mongoose.Schema({
 /*     imageUrl:{
         
     } */
-    tags: ["tech-fest", "registration", "competition", "workshop"],
+    tags: [],
     featured: {
         type: Boolean,
         default: false

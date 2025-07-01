@@ -5,6 +5,7 @@ import { useAuthStore } from '../store/authStore';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import Footer from '../components/Footer.jsx';
 import Header from '../components/Header.jsx';
+import getImageForCategory from '../components/Image.jsx';
 
 const NewsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -86,24 +87,12 @@ const NewsPage = () => {
   // Categories based on your data
   const categories = [
     { id: 'all', name: 'All News', icon: BookOpen },
-    { id: 'tech-fest', name: 'Tech Events', icon: Code },
-    { id: 'sports', name: 'Sports', icon: Trophy },
-    { id: 'academic', name: 'Academic', icon: Beaker },
-    { id: 'campus', name: 'Campus Life', icon: Users },
-    { id: 'event', name: 'Events', icon: Calendar },
+    { id: 'tech-festN', name: 'Tech Events', icon: Code },
+    { id: 'sportsN', name: 'Sports', icon: Trophy },
+    { id: 'academicN', name: 'Academic', icon: Beaker },
+    { id: 'campusN', name: 'Campus Life', icon: Users },
+    { id: 'eventN', name: 'Events', icon: Calendar },
   ];
-
-  // Generate random images for demo (you can replace with actual image URLs from your backend)
-  const getImageForCategory = (category) => {
-    const images = {
-      'tech-fest': 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=400&fit=crop',
-      'sports': 'https://images.unsplash.com/photo-1593013820725-ca0b6076576f?w=800&h=400&fit=crop',
-      'academic': 'https://images.unsplash.com/photo-1537495329792-41ae41ad3bf0?w=800&h=400&fit=crop',
-      'campus': 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&h=400&fit=crop',
-      'event': 'https://plus.unsplash.com/premium_photo-1661306437817-8ab34be91e0c??w=800&h=400&fit=crop',
-    };
-    return images[category] || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=400&fit=crop';
-  };
 
   const NewsCard = ({ article, featured = false }) => (
     <div

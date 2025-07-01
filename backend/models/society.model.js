@@ -14,7 +14,7 @@ const societySchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ["cultural", "technical", "sports", "academic", "social","creative","business"],
+        enum: ["culturalS", "technicalS", "sportsS", "academicS", "socialS","creativeS","businessS"],
         required: true
     },
     seats: {

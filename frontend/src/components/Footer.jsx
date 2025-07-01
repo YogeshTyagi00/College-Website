@@ -44,7 +44,7 @@ const Footer = () => {
 
                     {/* Section 3: Connect With Us */}
                     <div className="text-center md:text-left">
-                        <h4 className="text-lg font-semibold mb-4">Maintained & Developed by Yogesh</h4>
+                        <h4 className="text-lg font-semibold mb-4">Developed & Maintained by Yogesh</h4>
                         <ul className="space-y-3">
                             
                             <li>

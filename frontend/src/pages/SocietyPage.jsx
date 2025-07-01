@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { Search, Calendar, User, ChevronRight, BookOpen, Users, Trophy, Beaker, Clock, Code, Zap, X, ArrowLeft, MapPin, Mail, Phone, Star, Check, UserPlus, Heart, Music, Camera, Palette, Globe, TrendingUp, Newspaper, LogOut } from 'lucide-react';
+import { Search, Calendar, User, ChevronRight, BookOpen, Users, Trophy, Beaker, Clock, Code, Zap, X, ArrowLeft, MapPin, Mail, Phone, Star, Check, UserPlus, Heart, Music, Camera, Palette, Globe, TrendingUp, Newspaper, LogOut,CircleDashed } from 'lucide-react';
 import { useAuthStore } from '../store/authStore.js';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer.jsx';
 import Header from '../components/Header.jsx';
+import getImageForCategory from '../components/Image.jsx';
 
 const SocietyPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -64,28 +65,14 @@ const SocietyPage = () => {
   // Categories
   const categories = [
     { id: 'all', name: 'All Societies', icon: Users },
-    { id: 'technical', name: 'Technical', icon: Code },
-    { id: 'cultural', name: 'Cultural', icon: Music },
-    { id: 'business', name: 'Business', icon: Zap },
-    { id: 'creative', name: 'Creative', icon: Palette },
-    { id: 'social', name: 'Social Impact', icon: Heart },
-    { id: 'academic', name: 'Academic', icon: BookOpen }
+    { id: 'technicalS', name: 'Technical', icon: Code },
+    { id: 'culturalS', name: 'Cultural', icon: Music },
+    { id: 'businessS', name: 'Business', icon: Zap },
+    { id: 'creativeS', name: 'Creative', icon: Palette },
+    { id: 'socialS', name: 'Social Impact', icon: Heart },
+    { id: 'academicS', name: 'Academic', icon: BookOpen },
+    {id: 'sportsS', name: 'Sports', icon: CircleDashed  },
   ];
-
-  // Get image for category
-  const getImageForCategory = (category) => {
-    const images = {
-      'sports': 'https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=800&h=400&fit=crop',
-      'technical': 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=800&h=400&fit=crop',
-      'cultural': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=400&fit=crop',
-      'business': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop',
-      'creative': 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&h=400&fit=crop',
-      'social': 'https://images.unsplash.com/photo-1532629391-a67b5f152f20?w=800&h=400&fit=crop',
-      'academic': 'https://images.unsplash.com/photo-1513258814515-d36c2e3612d3?w=800&h=400&fit=crop',
-      'all': 'https://images.unsplash.com/photo-1478147493297-c0f5855d0124?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-    };
-    return images[category] || 'https://images.unsplash.com/photo-1478147493297-c0f5855d0124?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; // Default image
-  };
 
   const SocietyCard = ({ society, onSocietyClick, isRegistered }) => {
     const isRegistrationLinkAvailable = !!society.registrationLink;

@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { Search, Calendar, MapPin, Clock, Users, Trophy, Beaker, Code, X, ArrowLeft, BookOpen, Sparkles, Tag } from 'lucide-react';
+import { Search, Calendar, MapPin, Clock, Users, Trophy, Beaker, Code, X, ArrowLeft, BookOpen, Sparkles, Tag, Mic } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer.jsx';
 import Header from '../components/Header.jsx';
+import getImageForCategory from '../components/Image.jsx';
 
 const EventsPage = () => {
     const [selectedCategory, setSelectedCategory] = useState('all');
@@ -79,24 +80,13 @@ const EventsPage = () => {
     // Categories for events
     const categories = [
         { id: 'all', name: 'All Events', icon: BookOpen },
-        { id: 'technical', name: 'Technical', icon: Code },
-        { id: 'sports', name: 'Sports', icon: Trophy },
-        { id: 'academic', name: 'Academic', icon: Beaker },
-        { id: 'cultural', name: 'Cultural', icon: Users },
-        { id: 'webinar', name: 'Webinars', icon: Sparkles },
+        { id: 'competitionE', name: 'Competition', icon: Code },
+        { id: 'sportsE', name: 'Sports', icon: Trophy },
+        { id: 'internshipE', name: 'Internship', icon: Beaker },
+        { id: 'culturalE', name: 'Cultural', icon: Users },
+        { id: 'workshopE', name: 'Workshop', icon: Sparkles },
+        {id: 'seminar', name: 'Seminars', icon: Mic},
     ];
-
-    // Image handling for categories
-    const getImageForCategory = (category) => {
-        const images = {
-            'competition': 'https://images.unsplash.com/photo-1517036611336-e69c8f5f1c9c?w=800&h=400&fit=crop',
-            'sports': 'https://images.unsplash.com/photo-1579952363873-ce079a40a45d?w=800&h=400&fit=crop',
-            'academic': 'https://images.unsplash.com/photo-1541339907198-e0875664570a?w=800&h=400&fit=crop',
-            'cultural': 'https://images.unsplash.com/photo-1507525428034-b723cf961e3e?w=800&h=400&fit=crop',
-            'workshop': 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=400&fit=crop',
-        };
-        return images[category] || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=400&fit=crop';
-    };
 
     const EventCard = ({ event, featured = false }) => (
         <div
