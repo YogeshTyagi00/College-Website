@@ -14,12 +14,12 @@ router.post('/login',login);
 router.post('/logout',logout);
 
 router.post('/news',createnews);
-router.get('/news',getnews);
+router.get('/news',verifyToken,getnews);
 
 router.post('/events', createevents);
-router.get('/events', getevents);
+router.get('/events',verifyToken, getevents);
 
 router.post('/society',createsociety);
-router.get('/society',getsociety);
+router.get('/society',verifyToken,getsociety);
 
 export default router;

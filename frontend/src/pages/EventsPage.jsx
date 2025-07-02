@@ -21,8 +21,7 @@ const EventsPage = () => {
         fetchEvents();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    console.log("Fetched Event Data:", eventData);
+    console.log(eventData);
 
     // Extract ID for React keys (handle both string and object formats)
     const getEventId = (event) => {
@@ -108,7 +107,7 @@ const EventsPage = () => {
                             {event.category}
                         </span>
                     </div>
-                    {event.featured && ( // Now directly checking event.featured
+                    {event.featured && ( 
                         <div className="absolute top-4 right-4">
                             <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
                                 ⭐ Featured
@@ -190,7 +189,7 @@ const EventsPage = () => {
                             <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium capitalize shadow-lg">
                                 {event.category}
                             </span>
-                            {event.featured && ( // Now directly checking event.featured
+                            {event.featured && ( 
                                 <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
                                     ⭐ Featured
                                 </span>
@@ -240,7 +239,7 @@ const EventsPage = () => {
                                     href={event.registrationLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center bg-gradient-to-r from-green-500 to-teal-500 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                                    className="inline-flex items-center bg-gradient-to-r from-yellow-500 to-amber-800 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                                 >
                                     <Tag className="w-5 h-5 mr-3" />
                                     Register Now

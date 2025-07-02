@@ -35,7 +35,7 @@ const DashboardPage = () => {
 
   const popularSocieties = (societiesData || []).slice(0, 4); // Show 4 societies
 
-  // Simplified NewsCard for Dashboard view
+  //NewsCard for Dashboard view
   const DashboardNewsCard = ({ article, featured = false }) => {
     const rawDate = article.publishedAt?.$date || article.publishedAt;
     let formattedDate = 'N/A Date'; // Default fallback
@@ -43,7 +43,7 @@ const DashboardPage = () => {
     try {
       const dateObj = new Date(rawDate);
       if (!isNaN(dateObj.getTime())) { // Check if date is valid
-        formattedDate = format(dateObj, 'MMM dd, yyyy'); // Changed format string to 'yyyy'
+        formattedDate = format(dateObj, 'MMM dd, yyyy'); 
       }
     } catch (error) {
       console.error("Error formatting date:", error, "for article:", article);
@@ -51,7 +51,7 @@ const DashboardPage = () => {
 
     return (
       <div className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] flex flex-col h-full cursor-pointer`}
-        onClick={() => navigate('/news')}> {/* Direct to news page */}
+        onClick={() => navigate('/news')}> 
         <img src={getImageForCategory(article.category)} alt={article.title} className="w-full h-36 object-cover" />
         <div className="p-4 flex flex-col justify-between flex-grow">
           <div>
@@ -67,10 +67,10 @@ const DashboardPage = () => {
     );
   };
 
-  // Simplified EventCard for Dashboard view
+  //EventCard for Dashboard view
   const DashboardEventCard = ({ event }) => (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] flex flex-col h-full cursor-pointer"
-      onClick={() => navigate('/events')}> {/* Direct to news/events page, as events are grouped with news for now */}
+      onClick={() => navigate('/events')}> 
       <img src={getImageForCategory(event.category)} alt={event.title} className="w-full h-36 object-cover" />
       <div className="p-4 flex flex-col justify-between flex-grow">
         <div>
@@ -88,10 +88,10 @@ const DashboardPage = () => {
     </div>
   );
 
-  // Simplified SocietyCard for Dashboard view
+  //SocietyCard for Dashboard view
   const DashboardSocietyCard = ({ society }) => (
     <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02] flex flex-col h-full cursor-pointer"
-      onClick={() => navigate('/society')}> {/* Direct to societies page */}
+      onClick={() => navigate('/society')}>
       <img src={getImageForCategory(society.category)} alt={society.name} className="w-full h-32 object-cover" />
       <div className="p-4 flex flex-col justify-between flex-grow">
         <div>
@@ -99,7 +99,7 @@ const DashboardPage = () => {
           <p className="text-gray-600 text-sm line-clamp-2">{society.description}</p>
         </div>
         <div className="flex items-center justify-between text-xs text-gray-500 mt-auto pt-3 border-t border-gray-100">
-          <span>{society.members || 'N/A'} members</span> {/* Use 'members' or N/A */}
+          <span>{society.members || 'N/A'} members</span>
           {society.registrationOpen && (
             <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">Open</span>
           )}

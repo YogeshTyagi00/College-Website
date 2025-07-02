@@ -274,9 +274,9 @@ const SocietyPage = () => {
                   href={isRegistrationLinkAvailable ? society.registrationLink : '#'} // Conditional href
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`px-8 py-3 rounded-xl text-lg font-semibold transition-all duration-300 flex items-center shadow-md ${isDisabled
+                  className={`px-8 py-3 rounded-xl text-lg font-semibold transition-all duration-300 inline-flex items-center shadow-md ${isDisabled
                       ? 'bg-gray-400 text-gray-700 cursor-not-allowed pointer-events-none' // Added pointer-events-none
-                      : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg transform hover:scale-105 hover:from-blue-700 hover:to-purple-700'
+                      : 'bg-gradient-to-r from-teal-600 to-green-600text-white hover:shadow-lg transform hover:scale-105 hover:from-teal-700 to-green-700'
                     }`}
                   onClick={(e) => {
                     if (isDisabled) {

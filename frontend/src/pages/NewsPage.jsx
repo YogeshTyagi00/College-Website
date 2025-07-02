@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { Search, Calendar, User, ChevronRight, BookOpen, Users, Trophy, Beaker, Clock, Code, Zap, X, ArrowLeft, TrendingUp, Newspaper, LogOut } from 'lucide-react'; // Added missing icons
+import { Search, Calendar, User, ChevronRight, BookOpen, Users, Trophy, Beaker, Clock, Code, Zap, X, ArrowLeft, TrendingUp, Newspaper, LogOut } from 'lucide-react'; 
 import { useAuthStore } from '../store/authStore';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import { useNavigate } from 'react-router-dom'; 
 import Footer from '../components/Footer.jsx';
 import Header from '../components/Header.jsx';
 import getImageForCategory from '../components/Image.jsx';
@@ -12,10 +12,10 @@ const NewsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [visibleArticles, setVisibleArticles] = useState(6);
   const [selectedArticle, setSelectedArticle] = useState(null);
-  const [activeTab, setActiveTab] = useState('news'); // State for active tab, default to 'news'
+  const [activeTab, setActiveTab] = useState('news');
 
   const { newsinfo: newsData, fetchNews } = useAuthStore();
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchNews();
@@ -23,12 +23,13 @@ const NewsPage = () => {
   }, []);
   console.log(newsData);
 
-  // Extract ID for React keys (handle both string and object formats)
+
+  // Extract ID for React keys 
   const getArticleId = (article) => {
     return typeof article._id === 'string' ? article._id : article._id.$oid;
   }
 
-  // Format date from your backend structure
+
   const formatDate = (dateObj) => {
     // eslint-disable-next-line no-undef
     const dateString = typeof dateObj === 'string' ? dateObj : article._id ? article._id.$date : dateObj.$date; // Handle different date formats
@@ -50,13 +51,13 @@ const NewsPage = () => {
   // Handle article click
   const handleArticleClick = (article) => {
     setSelectedArticle(article);
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    document.body.style.overflow = 'hidden';
   };
 
   // Close article modal
   const closeArticle = () => {
     setSelectedArticle(null);
-    document.body.style.overflow = 'unset'; // Restore scrolling
+    document.body.style.overflow = 'unset';
   };
 
   // Handle escape key to close modal
@@ -84,7 +85,7 @@ const NewsPage = () => {
   const featuredNews = filteredNews.filter(article => article.featured);
   const regularNews = filteredNews.filter(article => !article.featured);
 
-  // Categories based on your data
+  // Categories based on data
   const categories = [
     { id: 'all', name: 'All News', icon: BookOpen },
     { id: 'tech-festN', name: 'Tech Events', icon: Code },
@@ -166,7 +167,7 @@ const NewsPage = () => {
 
   // Article Modal Component
   const ArticleModal = ({ article, onClose }) => (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div className="fixed inset-0 z-50 overflow-y-auto ">
       {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
@@ -262,7 +263,7 @@ const NewsPage = () => {
 
       {/* Page Content Header with Search */}
       <div className="pt-32">
-        <div className="bg-white shadow-sm border-b border-gray-100 "> {/* Added padding-top to account for fixed header */}
+        <div className="bg-white shadow-sm border-b border-gray-100 ">
           <div className="max-w-7xl mx-auto px-4 py-8">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <div className="mb-8 lg:mb-0">
