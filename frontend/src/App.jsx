@@ -12,22 +12,21 @@ import { useAuthStore } from "./store/authStore.js";
 import LoginPage from "./pages/LoginPage.jsx";
 import EventsPage from "./pages/EventsPage.jsx";
 import DonatePage from "./pages/DonatePage.jsx";
+import AdminPage from "./pages/AdminPage.jsx";
 
 //protect authenticated routes from being accessed by unauthenticated users
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuthStore();
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  const { isAuthenticated, isCheckingAuth } = useAuthStore();
+  if (isCheckingAuth) return null;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
   return children;
 }
 
 //redirect to home if already authenticated
 const RedirectAuthenticatedUser = ({ children }) => {
-  const { isAuthenticated } = useAuthStore();
-  if (isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
+  const { isAuthenticated, isCheckingAuth } = useAuthStore();
+  if (isCheckingAuth) return null;
+  if (isAuthenticated) return <Navigate to="/" replace />;
   return children;
 }
 
@@ -68,6 +67,12 @@ function App() {
           } /> 
 
           <Route path="/donate" element={<DonatePage />} />
+
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <AdminPage />
+            </ProtectedRoute>
+          } />
 
           <Route path="/signup" element={
             <RedirectAuthenticatedUser>

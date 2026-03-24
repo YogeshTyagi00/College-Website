@@ -14,6 +14,7 @@ export const useAuthStore = create((set) => ({
     eventsinfo: [],
     isAuthenticated: false,
     isLoading: false,
+    isCheckingAuth: true,
     error: null,
     message: null,
 
@@ -87,12 +88,12 @@ export const useAuthStore = create((set) => ({
     },
 
     checkAuth: async () => {
-        set({ isLoading: true, error: null });
+        set({ isCheckingAuth: true });
         try {
-            const response = await axios.get(`${API_URL}/check-auth`);
-            set({ user: response.data.user, isAuthenticated: response.data.isAuthenticated, isLoading: false });
+            const response = await axios.get(`${API_URL}/check-auth`, { timeout: 5000 });
+            set({ user: response.data.user, isAuthenticated: response.data.isAuthenticated, isCheckingAuth: false });
         } catch (error) {
-            set({error: null, isLoading: false,isAuthenticated: false });
+            set({ error: null, isAuthenticated: false, isCheckingAuth: false });
         }
     },
 

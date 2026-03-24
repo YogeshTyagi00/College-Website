@@ -79,7 +79,7 @@ const DashboardPage = () => {
         </div>
         <div className="flex items-center text-xs text-gray-500 mt-auto">
           <Calendar className="w-3 h-3 mr-1" />
-          <span>{format(new Date(event.date), 'MMM dd, yyyy, p')}</span>
+          <span>{event.date ? format(new Date(event.date), 'MMM dd, yyyy') : 'Date TBD'}</span>
           <span className="ml-auto bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium capitalize">
             {event.category.replace('-', ' ')}
           </span>

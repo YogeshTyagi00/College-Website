@@ -30,8 +30,11 @@ const EventsPage = () => {
 
     // Format date for event display (e.g., "January 25, 2024")
     const formatEventDate = (dateObj) => {
+        if (!dateObj) return 'Date TBD';
         const dateString = typeof dateObj === 'string' ? dateObj : dateObj.$date;
-        return new Date(dateString).toLocaleDateString('en-US', {
+        const d = new Date(dateString);
+        if (isNaN(d.getTime())) return 'Date TBD';
+        return d.toLocaleDateString('en-US', {
             month: 'long',
             day: 'numeric',
             year: 'numeric',
