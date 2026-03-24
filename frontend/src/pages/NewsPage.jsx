@@ -88,11 +88,11 @@ const NewsPage = () => {
   // Categories based on data
   const categories = [
     { id: 'all', name: 'All News', icon: BookOpen },
-    { id: 'tech-festN', name: 'Tech Events', icon: Code },
-    { id: 'sportsN', name: 'Sports', icon: Trophy },
-    { id: 'academicN', name: 'Academic', icon: Beaker },
-    { id: 'campusN', name: 'Campus Life', icon: Users },
-    { id: 'eventN', name: 'Events', icon: Calendar },
+    { id: 'tech-festE', name: 'Tech Events', icon: Code },
+    { id: 'sportsE', name: 'Sports', icon: Trophy },
+    { id: 'academicE', name: 'Academic', icon: Beaker },
+    { id: 'campusE', name: 'Campus Life', icon: Users },
+    { id: 'eventE', name: 'Events', icon: Calendar },
   ];
 
   const NewsCard = ({ article, featured = false }) => (
@@ -246,9 +246,23 @@ const NewsPage = () => {
 
             {/* Article content */}
             <div className="prose prose-lg max-w-none">
-              <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap">
-                {article.content}
-              </p>
+              {article.content.startsWith('Full notice:') ? (
+                <div className="text-center py-6">
+                  <p className="text-gray-600 mb-4">This notice is available as a PDF document on the DTU website.</p>
+                  <a
+                    href={article.content.replace('Full notice: ', '').trim()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
+                  >
+                    View Full Notice (PDF) →
+                  </a>
+                </div>
+              ) : (
+                <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap">
+                  {article.content}
+                </p>
+              )}
             </div>
           </div>
         </div>

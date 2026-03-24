@@ -26,7 +26,7 @@ export const createnews = async (req, res) => {
 }
 export const getnews = async (req, res) => {
     try {
-        const newsItems = await UserNews.find().sort({ createdAt: -1 });
+        const newsItems = await UserNews.find().sort({ publishedAt: -1 });
         res.status(200).json(newsItems);
     } catch (error) {
         console.error("Error fetching news items:", error);     

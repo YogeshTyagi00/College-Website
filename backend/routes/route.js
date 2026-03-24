@@ -3,6 +3,7 @@ import express from 'express';
 import { createevents, createnews, getnews, createsociety, getsociety,signup, checkAuth, login, logout, getevents} from '../controller/controller.js';
 import { verifyToken } from '../middleware/verifyToken.js';
 import { createOrder, verifyPayment, getDonations } from '../controller/donationController.js';
+import { triggerNewsScrape } from '../controller/scraperController.js';
 
 const router = express.Router();
 
@@ -21,7 +22,8 @@ router.get('/events',verifyToken, getevents);
 router.post('/society',createsociety);
 router.get('/society',verifyToken,getsociety);
 
-// Donation routes (no auth required — guests can donate)
+// Scraper route (protected — only logged in users can trigger manually)
+router.post('/scrape/news', verifyToken, triggerNewsScrape);
 router.post('/donation/create-order', createOrder);
 router.post('/donation/verify', verifyPayment);
 router.get('/donations', verifyToken, getDonations);
