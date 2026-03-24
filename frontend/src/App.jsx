@@ -11,6 +11,7 @@ import SignUpPage from "./pages/SignUpPage.jsx";
 import { useAuthStore } from "./store/authStore.js";
 import LoginPage from "./pages/LoginPage.jsx";
 import EventsPage from "./pages/EventsPage.jsx";
+import DonatePage from "./pages/DonatePage.jsx";
 
 //protect authenticated routes from being accessed by unauthenticated users
 const ProtectedRoute = ({ children }) => {
@@ -65,6 +66,8 @@ function App() {
             <EventsPage />
           </ProtectedRoute>
           } /> 
+
+          <Route path="/donate" element={<DonatePage />} />
 
           <Route path="/signup" element={
             <RedirectAuthenticatedUser>

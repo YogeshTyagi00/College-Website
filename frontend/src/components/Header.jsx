@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"
-import { TrendingUp, Users, Newspaper, LogOut, Calendar } from 'lucide-react';
+import { TrendingUp, Users, Newspaper, LogOut, Calendar, Heart } from 'lucide-react';
 import { useAuthStore } from "../store/authStore.js";
 
 const Header = ({ activeTab }) => {
@@ -59,6 +59,16 @@ const Header = ({ activeTab }) => {
                                     }`}
                             >
                                 <Users className="w-5 h-5 mr-2" /> Societies
+                            </button>
+
+                            <button
+                                onClick={() => navigate('/donate')}
+                                className={`flex items-center px-6 py-3 rounded-full text-lg font-semibold transition-all duration-300 shadow-md transform ${activeTab === 'donate'
+                                        ? 'bg-gradient-to-r from-pink-400 to-red-400 text-white scale-105 shadow-xl'
+                                        : 'bg-white text-gray-700 hover:bg-gray-100 hover:shadow-lg border border-gray-200'
+                                    }`}
+                            >
+                                <Heart className="w-5 h-5 mr-2" /> Donate
                             </button>
                             
                         </nav>
