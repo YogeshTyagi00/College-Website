@@ -48,7 +48,7 @@ const HeroSection = ({ setActiveTab }) => {
       initial="hidden"
       animate="visible"
       // Option 3 Colors: Dark Teal to almost Black (retained)
-      className="relative overflow-hidden bg-gradient-to-br from-teal-800 to-gray-900 rounded-3xl p-10 sm:p-16 text-white text-center shadow-2xl border border-teal-600 transform transition-all duration-500 hover:shadow-3xl hover:scale-[1.005] m-auto"
+      className="relative overflow-hidden bg-gradient-to-br from-teal-800 to-gray-900 rounded-3xl p-6 sm:p-10 md:p-16 text-white text-center shadow-2xl border border-teal-600 transform transition-all duration-500 hover:shadow-3xl hover:scale-[1.005] m-auto"
     >
       {/* Subtle Background Overlay */}
       <div className="absolute inset-0 z-0 bg-gradient-to-br from-blue-900/50 via-gray-900/50 to-teal-900/50 mix-blend-overlay opacity-60"></div>
@@ -58,7 +58,7 @@ const HeroSection = ({ setActiveTab }) => {
         {/* Main Heading */}
         <motion.h2
           variants={itemVariants}
-          className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-4 tracking-tight leading-tight drop-shadow-md"
+          className="text-3xl sm:text-5xl lg:text-7xl font-extrabold mb-4 tracking-tight leading-tight drop-shadow-md"
         >
           <span className="block text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-white">Your Campus.</span>
           <span className="block mt-2 text-white">Unleashed.</span>
@@ -67,7 +67,7 @@ const HeroSection = ({ setActiveTab }) => {
         {/* Descriptive Paragraph */}
         <motion.p
           variants={itemVariants}
-          className="text-lg sm:text-xl md:text-2xl text-gray-200 max-w-4xl mx-auto font-light leading-relaxed"
+          className="text-base sm:text-xl md:text-2xl text-gray-200 max-w-4xl mx-auto font-light leading-relaxed"
         >
           Dive into real-time updates, discover thriving societies, and never miss a beat. All your college life, simplified.
         </motion.p>

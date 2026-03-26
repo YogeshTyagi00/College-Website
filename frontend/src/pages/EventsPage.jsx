@@ -170,7 +170,7 @@ const EventsPage = () => {
                         <img
                             src={getImageForCategory(event.category)}
                             alt={event.title}
-                            className="w-full h-64 object-cover"
+                            className="w-full h-40 sm:h-64 object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
 
@@ -264,25 +264,25 @@ const EventsPage = () => {
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
             <Header activeTab={activeTab} />
 
-            <div className="pt-32">
+            <div className="pt-20 sm:pt-24">
                 <div className="bg-white shadow-sm border-b border-gray-100 ">
-                    <div className="max-w-7xl mx-auto px-4 py-8">
-                        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                            <div className="mb-8 lg:mb-0">
-                                <h1 className="text-5xl font-bold text-gray-900 mb-3">
+                    <div className="max-w-7xl mx-auto px-4 py-6">
+                        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                            <div>
+                                <h1 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-2">
                                     Campus <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-700">Events</span>
                                 </h1>
-                                <p className="text-gray-600 text-xl">Discover and join exciting events happening around campus!</p>
+                                <p className="text-gray-600 text-base sm:text-xl">Discover and join exciting events happening around campus!</p>
                             </div>
 
-                            <div className="relative max-w-md w-full">
+                            <div className="relative w-full lg:max-w-md">
                                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                                 <input
                                     type="text"
                                     placeholder="Search events by title, description, or location..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm hover:shadow-md text-gray-700"
+                                    className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm text-gray-700"
                                 />
                             </div>
                         </div>

@@ -115,7 +115,7 @@ const DashboardPage = () => {
       <Header activeTab={activeTab} />
 
       {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto pt-[150px] pb-10 px-4 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto pt-20 sm:pt-24 pb-10 px-4 sm:px-6 lg:px-8">
         {activeTab === 'dashboard' && (
           <div className="space-y-15 pb-20">
 
