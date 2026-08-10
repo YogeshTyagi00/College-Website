@@ -13,14 +13,15 @@ WORKDIR /app
 
 #---caching--
 COPY package*.json ./
-COPY frontend/package*.json ./
-COPY backend/package*.json ./
+COPY frontend/package*.json ./frontend/
 
 RUN npm install
 RUN npm install --prefix frontend 
 #if changing server.js won't effect this part it was cached ; no need to install again package.json
 
 COPY . .
+
+RUN npm run build --prefix frontend
 
 ENV NODE_ENV=production
 ENV PORT=3000
