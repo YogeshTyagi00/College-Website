@@ -2,7 +2,13 @@ name: ci/cd for college website
 
 on:
   push:
-    branches:[main]
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - '.dockerignore'
+      - 'LICENSE'
+  workflow_dispatch:
 
 jobs:
   deploy:
