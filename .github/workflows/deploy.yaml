@@ -29,7 +29,8 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
         with:
-          type: public
+          registry-type: public
+
 
       - name: build, tag and push image to ecr
         env:
