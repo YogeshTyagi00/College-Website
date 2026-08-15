@@ -45,8 +45,17 @@ export const scrapeAndSaveNews = async () => {
     let browser;
     try {
         browser = await puppeteer.launch({
-            headless: "new",
-            args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        headless: "new",
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+        args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage", 
+        "--disable-gpu",
+        "--disable-software-rasterizer",
+        "--no-zygote",
+        "--window-size=1280,800",
+        ],
         });
     } catch (err) {
         console.error("[Scraper] Failed to launch browser:", err.message);
@@ -60,7 +69,7 @@ export const scrapeAndSaveNews = async () => {
     try {
         const page = await browser.newPage();
         await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
-        await page.goto(DTU_HOME_URL, { waitUntil: "networkidle2", timeout: 30000 });
+        await page.goto(DTU_HOME_URL, { waitUntil: "domcontentloaded", timeout: 60000 });
 
         // Find all tab buttons by their visible text
         const tabTexts = ["Latest News", "Notices", "Jobs", "Forthcoming Events", "Ist Year Notices"];
