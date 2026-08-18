@@ -10,6 +10,7 @@ axios.defaults.withCredentials = true;
 export const useAuthStore = create((set) => ({
     user: null,
     newsinfo: [],
+    newsPagination: { currentPage: 1, totalPages: 1, totalCount: 0, limit: 9 },
     societiesinfo: [],
     eventsinfo: [],
     isAuthenticated: false,
@@ -18,12 +19,21 @@ export const useAuthStore = create((set) => ({
     error: null,
     message: null,
 
-    fetchNews: async () => {
+    fetchNews: async (page = 1, limit = 9) => {
         set({ isLoading: true, error: null });
         try {
-            const response = await axios.get(`${API_URL}/news`);
-            set({ newsinfo: response.data, isLoading: false });
-            console.log(response);
+            const response = await axios.get(`${API_URL}/news`, { params: { page, limit } });
+            // response.data = { data, currentPage, totalPages, totalCount, limit }
+            set({
+                newsinfo: response.data.data,
+                newsPagination: {
+                    currentPage: response.data.currentPage,
+                    totalPages: response.data.totalPages,
+                    totalCount: response.data.totalCount,
+                    limit: response.data.limit,
+                },
+                isLoading: false,
+            });
         } catch (error) {
             set({ error: error.message, isLoading: false });
             throw error;

@@ -10,18 +10,18 @@ import getImageForCategory from '../components/Image.jsx';
 const NewsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  const [visibleArticles, setVisibleArticles] = useState(6);
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [activeTab, setActiveTab] = useState('news');
 
-  const { newsinfo: newsData, fetchNews } = useAuthStore();
+  const { newsinfo: newsData, newsPagination, fetchNews, isLoading } = useAuthStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchNews();
+    fetchNews(currentPage);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  console.log(newsData);
+  }, [currentPage]);
+
 
 
   // Extract ID for React keys 
@@ -329,8 +329,8 @@ const NewsPage = () => {
           {/* Results Counter */}
           <div className="mb-8">
             <p className="text-gray-600">
-              Showing {filteredNews.length} article{filteredNews.length !== 1 ? 's' : ''}
-              {selectedCategory !== 'all' && ` in ${categories.find(c => c.id === selectedCategory)?.name}`}
+              Showing {newsData.length} of {newsPagination.totalCount} article{newsPagination.totalCount !== 1 ? 's' : ''}
+              {selectedCategory !== 'all' && ` · filtered by ${categories.find(c => c.id === selectedCategory)?.name}`}
               {searchTerm && ` matching "${searchTerm}"`}
             </p>
           </div>
@@ -354,25 +354,43 @@ const NewsPage = () => {
           )}
 
           {/* Regular News */}
-          {regularNews.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center py-24">
+              <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : regularNews.length > 0 ? (
             <div>
               <div className="flex items-center mb-8">
                 <h2 className="text-3xl font-bold text-gray-900">Latest News</h2>
                 <div className="ml-4 h-px bg-gradient-to-r from-blue-400 to-transparent flex-1"></div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {regularNews.slice(0, visibleArticles).map(article => (
+                {regularNews.map(article => (
                   <NewsCard key={getArticleId(article)} article={article} />
                 ))}
               </div>
 
-              {regularNews.length > visibleArticles && (
-                <div className="text-center mt-12">
+              {/* Pagination controls */}
+              {newsPagination.totalPages > 1 && (
+                <div className="flex items-center justify-center gap-3 mt-12">
                   <button
-                    onClick={() => setVisibleArticles(prev => prev + 6)}
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:from-blue-700 hover:to-purple-700"
+                    disabled={currentPage <= 1}
+                    onClick={() => setCurrentPage(p => p - 1)}
+                    className="px-5 py-2.5 rounded-xl font-semibold border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
                   >
-                    Load More Articles
+                    ← Prev
+                  </button>
+
+                  <span className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold shadow">
+                    {newsPagination.currentPage} / {newsPagination.totalPages}
+                  </span>
+
+                  <button
+                    disabled={currentPage >= newsPagination.totalPages}
+                    onClick={() => setCurrentPage(p => p + 1)}
+                    className="px-5 py-2.5 rounded-xl font-semibold border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
+                  >
+                    Next →
                   </button>
                 </div>
               )}

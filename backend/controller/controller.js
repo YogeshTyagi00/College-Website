@@ -26,8 +26,24 @@ export const createnews = async (req, res) => {
 }
 export const getnews = async (req, res) => {
     try {
-        const newsItems = await UserNews.find().sort({ publishedAt: -1 });
-        res.status(200).json(newsItems);
+        const page  = Math.max(1, parseInt(req.query.page)  || 1);
+        const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 9));
+        const skip  = (page - 1) * limit;
+
+        const [newsItems, totalCount] = await Promise.all([
+            UserNews.find().sort({ publishedAt: -1 }).skip(skip).limit(limit),
+            UserNews.countDocuments()
+        ]);
+
+        const totalPages = Math.ceil(totalCount / limit);
+
+        res.status(200).json({
+            data: newsItems,
+            currentPage: page,
+            totalPages,
+            totalCount,
+            limit
+        });
     } catch (error) {
         console.error("Error fetching news items:", error);     
         res.status(500).json({ message: "Internal server error" });
