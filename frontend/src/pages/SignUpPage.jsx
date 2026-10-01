@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import Input from "../components/InputField.jsx"; // Ensure InputField is updated
-import { User, BadgeCheck, Loader } from "lucide-react";
+import { User, BadgeCheck, Loader,Key } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore.js";
 import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
 
 const SignUpPage = () => {
-    const [name, setName] = useState("");
-    const [rollNo, setRollNo] = useState("");
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
 
     const { signup, isLoading, error: authError, clearError } = useAuthStore();
 
@@ -17,10 +17,10 @@ const SignUpPage = () => {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        console.log("Attempting to register with:", { name, rollNo });
+        console.log("Attempting to register with:", { userName, password });
 
         try {
-            await signup(name, rollNo);
+            await signup(userName, password);
             toast.success("Registration successful!");
             console.log("Registration successful!");
             navigate("/");
@@ -91,19 +91,19 @@ const SignUpPage = () => {
                         <Input
                             icon={User}
                             type='text'
-                            placeholder='Full Name'
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            placeholder='UserName'
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value.toLowerCase())}
                             required
                             variants={itemVariants} // Pass item variants directly
                         />
                         {/* Roll No Input - now correctly receives variants */}
                         <Input
-                            icon={BadgeCheck}
-                            type='text'
-                            placeholder='Roll No'
-                            value={rollNo}
-                            onChange={(e) => setRollNo(e.target.value.toUpperCase())}
+                            icon={Key}
+                            type='password'
+                            placeholder='Password'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                             required
                             variants={itemVariants} // Pass item variants directly
                         />

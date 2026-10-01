@@ -3,6 +3,7 @@ import { UserEvents } from "../models/events.model.js";
 import { UserSociety } from "../models/society.model.js";
 import { User } from "../models/user.model.js";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
+import bcryptjs from "bcryptjs";
 
 export const createnews = async (req, res) => {
     try {
@@ -119,27 +120,30 @@ export const getsociety = async (req, res) => {
 }
 
 export const signup = async (req, res) => {
-    const{name,rollNo} = req.body;
+    const{userName,password} = req.body;
     try {
-        if (!name || !rollNo) {
-            return res.status(400).json({ message: "Name and roll number are required" });
+        if (!userName || !password) {
+            return res.status(400).json({ message: "userName and password are required" });
         }
 
-        const userAlreadyExists = await User.findOne({ rollNo });
+        const userAlreadyExists = await User.findOne({ userName });
         if (userAlreadyExists) {
-            return res.status(400).json({ message: "User already exists" });
+            return res.status(400).json({ message: "UserName already exists" });
         }
+
+        const salt = await bcryptjs.genSalt(10);
+        const hashedPassword = await bcryptjs.hash(password, salt);
 
         const newUser = new User({
-            name,
-            rollNo
+            userName: userName.toLowerCase(),
+            password: hashedPassword
         });
 
         await newUser.save();
 
-        generateTokenAndSetCookie(res,newUser._id);
-       
-        res.status(201).json({ message: "User registered successfully", user: { name, rollNo } });
+        generateTokenAndSetCookie(res, newUser._id);
+
+        res.status(201).json({ message: "User registered successfully", user: { userName } });
 
     } catch (error) {
         console.error("Error registering user:", error);
@@ -147,22 +151,25 @@ export const signup = async (req, res) => {
     }
 }   
 export const login = async (req, res) => {
-    const { rollNo } = req.body;
+    const { userName, password } = req.body;
     try {
-        if (!rollNo) {
-            return res.status(400).json({ message: "Roll number is required" });
+        if (!userName || !password) {
+            return res.status(400).json({ message: "userName and password are required" });
         }
 
-        const user = await User.findOne({ rollNo });
+        const user = await User.findOne({ userName: userName.toLowerCase() });
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
+
+        const isPasswordValid = await bcryptjs.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: "Invalid credentials" });
         }
 
         generateTokenAndSetCookie(res, user._id);
 
-        await user.save();
-        
-        res.status(200).json({ message: "Login successful", user: { name: user.name, rollNo: user.rollNo } });
+        res.status(200).json({ message: "Login successful", user: { userName: user.userName } });
 
     } catch (error) {
         console.error("Error logging in:", error);
@@ -180,11 +187,11 @@ export const logout = async (req, res) => {
 }
 export const checkAuth = async (req, res) => {
     try {
-        const user = await User.findById(req.userId).select('name rollNo');
+        const user = await User.findById(req.userId).select('userName');
         if (!user) {    
             return res.status(404).json({ message: "User not found" });
         }
-        res.status(200).json({ isAuthenticated: true, user: { name: user.name, rollNo: user.rollNo } });
+        res.status(200).json({ isAuthenticated: true, user: { userName: user.userName } });
     } catch (error) {
         console.error("Error checking authentication:", error);
         res.status(500).json({ message: "Internal server error" });

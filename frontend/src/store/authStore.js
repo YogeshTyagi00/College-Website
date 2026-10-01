@@ -64,10 +64,10 @@ export const useAuthStore = create((set) => ({
         }
     },
 
-    signup: async (name, rollNo) => {
+    signup: async (userName, password) => {
         set({ isLoading: true, error: null });
         try {
-            const response = await axios.post(`${API_URL}/signup`, { name, rollNo });
+            const response = await axios.post(`${API_URL}/signup`, { userName, password });
             set({ user: response.data.user, isAuthenticated: true, message: response.data.message, isLoading: false });
         } catch (error) {
             set({ error: error.response.data.message || "Error signing up", isLoading: false });
@@ -86,10 +86,10 @@ export const useAuthStore = create((set) => ({
         }
     },
 
-    login: async (rollNo) => {
+    login: async (userName, password) => {
         set({ isLoading: true, error: null });
         try {
-            const response = await axios.post(`${API_URL}/login`, { rollNo });
+            const response = await axios.post(`${API_URL}/login`, { userName, password });
             set({ user: response.data.user, isAuthenticated: true, message: response.data.message, isLoading: false });
         } catch (error) {
             set({ error: error.response?.data?.message || "Error logging in", isLoading: false });

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Input from "../components/InputField.jsx";
-import { BadgeCheck, Loader } from "lucide-react";
+import { User, Key, Loader } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore.js";
 import { toast } from "react-hot-toast";
@@ -8,7 +8,8 @@ import { toast } from "react-hot-toast";
 import { motion } from "framer-motion"; 
 
 const LoginPage = () => {
-    const [rollNo, setRollNo] = useState("");
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
 
     const { login, isLoading, error: authError, clearError } = useAuthStore();
 
@@ -21,16 +22,16 @@ const LoginPage = () => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        console.log("Attempting to log in with Roll No:", rollNo);
+        console.log("Attempting to log in with:", { userName, password });
 
         try {
-            await login(rollNo);
+            await login(userName, password);
             toast.success("Login successful!");
             console.log("Login successful!");
             navigate("/");
         } catch (err) {
             console.error("Login failed:", err);
-            toast.error( "Login failed! Please check your Roll No.");
+            toast.error("Login failed! Please check your credentials.");
         }
     };
 
@@ -86,15 +87,26 @@ const LoginPage = () => {
                     </motion.h2>
 
                     <form onSubmit={handleLogin}>
-                        {/* Roll No Input Field  */}
+                        {/* UserName Input Field  */}
                         <Input
-                            icon={BadgeCheck}
+                            icon={User}
                             type='text'
-                            placeholder='Your Roll No'
-                            value={rollNo}
-                            onChange={(e) => setRollNo(e.target.value.toUpperCase())}
+                            placeholder='UserName'
+                            value={userName}
+                            onChange={(e) => setUserName(e.target.value.toLowerCase())}
                             required
-                            variants={itemVariants} 
+                            variants={itemVariants}
+                        />
+
+                        {/* Password Input Field  */}
+                        <Input
+                            icon={Key}
+                            type='password'
+                            placeholder='Password'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            variants={itemVariants}
                         />
 
                         {/* Display error from auth store*/}

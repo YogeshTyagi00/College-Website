@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    name: {
+    userName: {
         type: String,
         required: true,
     },
-    rollNo: {
+    password: {
         type: String,
         required: true,
     },
