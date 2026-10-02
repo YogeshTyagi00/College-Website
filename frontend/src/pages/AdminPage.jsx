@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Header from "../components/Header.jsx";
@@ -12,17 +12,11 @@ const tabs = [
 ];
 
 export default function AdminPage() {
-  const { user, checkAuth } = useAuthStore();
+  const { user } = useAuthStore();
   const [activeTab, setActiveTab] = useState("event");
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(null);
-
-  // Refresh auth on mount so role is always up-to-date
-  // (e.g. superadmin just granted admin access without a re-login)
-  useEffect(() => {
-    checkAuth();
-  }, []);
 
   const handleSubmit = async () => {
     if (!text.trim()) return toast.error("Paste some text first");

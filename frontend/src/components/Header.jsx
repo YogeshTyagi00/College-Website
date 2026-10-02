@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TrendingUp, Users, Newspaper, LogOut, Calendar, Menu, X, ShieldCheck } from 'lucide-react';
+import { TrendingUp, Users, Newspaper, LogOut, Calendar, Menu, X, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { useAuthStore } from "../store/authStore.js";
 
 const navItems = [
@@ -18,6 +18,7 @@ const Header = ({ activeTab }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isAdmin = user && ADMIN_ROLES.includes(user.role);
+  const isSuperAdmin = user?.role === 'superAdmin';
 
   const handleLogout = () => {
     logout();
@@ -57,6 +58,19 @@ const Header = ({ activeTab }) => {
                 }`}
             >
               <ShieldCheck className="w-4 h-4 mr-1.5" /> Admin
+            </button>
+          )}
+
+          {/* SuperAdmin button — only visible to superAdmin */}
+          {isSuperAdmin && (
+            <button
+              onClick={() => navigate('/superadmin')}
+              className={`flex items-center px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${activeTab === 'superadmin'
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-md'
+                  : 'bg-gradient-to-r from-purple-400 to-pink-400 text-white hover:from-purple-500 hover:to-pink-500 shadow-sm hover:shadow-md'
+                }`}
+            >
+              <ShieldAlert className="w-4 h-4 mr-1.5" /> SuperAdmin
             </button>
           )}
 
@@ -100,6 +114,16 @@ const Header = ({ activeTab }) => {
               className="flex items-center px-4 py-3 rounded-xl bg-gradient-to-r from-blue-400 to-purple-400 text-white text-sm font-semibold hover:from-blue-500 hover:to-purple-500"
             >
               <ShieldCheck className="w-4 h-4 mr-2" /> Admin Panel
+            </button>
+          )}
+
+          {/* SuperAdmin button (mobile) */}
+          {isSuperAdmin && (
+            <button
+              onClick={() => { navigate('/superadmin'); setMenuOpen(false); }}
+              className="flex items-center px-4 py-3 rounded-xl bg-gradient-to-r from-purple-400 to-pink-400 text-white text-sm font-semibold hover:from-purple-500 hover:to-pink-500"
+            >
+              <ShieldAlert className="w-4 h-4 mr-2" /> SuperAdmin Panel
             </button>
           )}
 
