@@ -14,6 +14,11 @@ const userSchema = new mongoose.Schema({
         enum:['user','admin','superAdmin'],
         default:'user'
     },
+    adminRequestStatus:{
+        type: String,
+        enum:['none', 'pending', 'approved', 'rejected'],
+        default: 'none'
+    },
     verificationToken: String,
     verificationTokenExpiresAt: Date,
 }, { timestamps: true });

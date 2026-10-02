@@ -18,6 +18,7 @@ const Header = ({ activeTab }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isAdmin = user && ADMIN_ROLES.includes(user.role);
+  const isSuperAdmin = user?.role === 'superAdmin';
 
   const handleLogout = () => {
     logout();
@@ -48,7 +49,6 @@ const Header = ({ activeTab }) => {
             </button>
           ))}
 
-          {/* Admin button — only visible to admin / superAdmin */}
           {isAdmin && (
             <button
               onClick={() => navigate('/admin')}
@@ -59,6 +59,20 @@ const Header = ({ activeTab }) => {
               }`}
             >
               <ShieldCheck className="w-4 h-4 mr-1.5" /> Admin
+            </button>
+          )}
+
+          {/* SuperAdmin button — only visible to superAdmin */}
+          {isSuperAdmin && (
+            <button
+              onClick={() => navigate('/superadmin')}
+              className={`flex items-center px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                activeTab === 'superadmin'
+                  ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
+                  : 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:from-purple-600 hover:to-indigo-600 shadow-sm hover:shadow-md'
+              }`}
+            >
+              <ShieldCheck className="w-4 h-4 mr-1.5" /> SuperAdmin
             </button>
           )}
 
@@ -103,6 +117,16 @@ const Header = ({ activeTab }) => {
               className="flex items-center px-4 py-3 rounded-xl bg-gradient-to-r from-blue-400 to-purple-400 text-white text-sm font-semibold hover:from-blue-500 hover:to-purple-500"
             >
               <ShieldCheck className="w-4 h-4 mr-2" /> Admin Panel
+            </button>
+          )}
+
+          {/* SuperAdmin button (mobile) */}
+          {isSuperAdmin && (
+            <button
+              onClick={() => { navigate('/superadmin'); setMenuOpen(false); }}
+              className="flex items-center px-4 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 text-white text-sm font-semibold hover:from-purple-600 hover:to-indigo-600"
+            >
+              <ShieldCheck className="w-4 h-4 mr-2" /> SuperAdmin Panel
             </button>
           )}
 

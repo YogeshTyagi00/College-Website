@@ -91,7 +91,7 @@ const SignUpPage = () => {
                         <Input
                             icon={User}
                             type='text'
-                            placeholder='UserName'
+                            placeholder='UserName(unique)'
                             value={userName}
                             onChange={(e) => setUserName(e.target.value.toLowerCase())}
                             required

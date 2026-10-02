@@ -107,6 +107,20 @@ export const useAuthStore = create((set) => ({
         }
     },
 
+    requestAdmin: async () => {
+        set({ isLoading: true, error: null });
+        try {
+            await axios.post(`${API_URL}/admin-request`);
+            set((state) => ({
+                user: { ...state.user, adminRequestStatus: 'pending' },
+                isLoading: false,
+            }));
+        } catch (error) {
+            set({ error: error.response?.data?.message || "Error submitting request", isLoading: false });
+            throw error;
+        }
+    },
+
     clearError: () => {
         set({ error: null });
     },

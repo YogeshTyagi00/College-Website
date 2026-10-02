@@ -12,6 +12,7 @@ import { useAuthStore } from "./store/authStore.js";
 import LoginPage from "./pages/LoginPage.jsx";
 import EventsPage from "./pages/EventsPage.jsx";
 import AdminPage from "./pages/AdminPage.jsx";
+import SuperAdminPage from "./pages/SuperAdminPage.jsx";
 
 //protect authenticated routes from being accessed by unauthenticated users
 const ProtectedRoute = ({ children }) => {
@@ -28,6 +29,15 @@ const AdminRoute = ({ children }) => {
   if (isCheckingAuth) return null;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   if (!ADMIN_ROLES.includes(user?.role)) return <Navigate to="/" replace />;
+  return children;
+}
+
+// protect superadmin routes — must be authenticated AND have superAdmin role
+const SuperAdminRoute = ({ children }) => {
+  const { isAuthenticated, isCheckingAuth, user } = useAuthStore();
+  if (isCheckingAuth) return null;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (user?.role !== 'superAdmin') return <Navigate to="/" replace />;
   return children;
 }
 
@@ -79,6 +89,12 @@ function App() {
             <AdminRoute>
               <AdminPage />
             </AdminRoute>
+          } />
+
+          <Route path="/superadmin" element={
+            <SuperAdminRoute>
+              <SuperAdminPage />
+            </SuperAdminRoute>
           } />
 
           <Route path="/signup" element={

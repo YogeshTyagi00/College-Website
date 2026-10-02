@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { LogOut, Newspaper, Users, ArrowRight, Bell, Calendar, TrendingUp, Award, Clock, Star, ChevronDown } from 'lucide-react';
+import { LogOut, Newspaper, Users, ArrowRight, Bell, Calendar, TrendingUp, Award, Clock, Star, ChevronDown, Shield, Loader } from 'lucide-react';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,14 +16,24 @@ import getImageForCategory from '../components/Image.jsx';
 
 const DashboardPage = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [showModal, setShowModal] = useState(false);
 
-  const { newsinfo: newsData, fetchNews, societiesinfo: societiesData, fetchSocieties, eventsinfo: mockEvents, fetchEvents } = useAuthStore();
+  const { newsinfo: newsData, fetchNews, societiesinfo: societiesData, fetchSocieties, eventsinfo: mockEvents, fetchEvents, user, requestAdmin, isLoading } = useAuthStore();
   useEffect(() => {
     fetchNews();
     fetchSocieties();
     fetchEvents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleRequestAdmin = async () => {
+    try {
+      await requestAdmin();
+      setShowModal(false);
+    } catch {
+      setShowModal(false);
+    }
+  };
 
 
   const navigate = useNavigate();
@@ -121,6 +131,63 @@ const DashboardPage = () => {
 
             {/* Hero Section */}
             <HeroSection />
+
+            {/* Admin Request Banner — only for regular users */}
+            {user?.role === 'user' && (
+              <section className="animate-fade-in mt-8">
+                {user.adminRequestStatus === 'none' && (
+                  <div className="flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 rounded-xl px-6 py-4 shadow-sm">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-blue-100 p-2 rounded-full">
+                        <Shield className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-800">Want admin access?</p>
+                        <p className="text-xs text-gray-500">Request admin privileges to manage content on this platform.</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="ml-4 shrink-0 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-200"
+                    >
+                      Request Access
+                    </button>
+                  </div>
+                )}
+
+                {user.adminRequestStatus === 'pending' && (
+                  <div className="flex items-center gap-3 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-100 rounded-xl px-6 py-4 shadow-sm">
+                    <div className="bg-amber-100 p-2 rounded-full">
+                      <Clock className="w-5 h-5 text-amber-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800">Request under review</p>
+                      <p className="text-xs text-gray-500">Your admin request has been submitted and is awaiting SuperAdmin approval.</p>
+                    </div>
+                  </div>
+                )}
+
+                {user.adminRequestStatus === 'rejected' && (
+                  <div className="flex items-center justify-between bg-gradient-to-r from-red-50 to-rose-50 border border-red-100 rounded-xl px-6 py-4 shadow-sm">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-red-100 p-2 rounded-full">
+                        <Shield className="w-5 h-5 text-red-500" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-800">Request was rejected</p>
+                        <p className="text-xs text-gray-500">Your previous request was declined. You may submit a new one.</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setShowModal(true)}
+                      className="ml-4 shrink-0 bg-red-500 hover:bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-200"
+                    >
+                      Try Again
+                    </button>
+                  </div>
+                )}
+              </section>
+            )}
 
             {/* Featured News */}
             {featuredNews.length > 0 && (
@@ -250,6 +317,40 @@ const DashboardPage = () => {
         {activeTab === 'events' && <EventsPage />}
       </main>
       <Footer />
+
+      {/* Admin Request Confirmation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8 animate-fade-in">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="bg-blue-100 p-3 rounded-full">
+                <Shield className="w-6 h-6 text-blue-600" />
+              </div>
+              <h2 className="text-xl font-bold text-gray-900">Request Admin Access</h2>
+            </div>
+            <p className="text-gray-600 text-sm mb-8">
+              This will send a request to the SuperAdmin for admin privileges.
+              You will be notified once it is reviewed.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowModal(false)}
+                className="flex-1 border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium py-2.5 rounded-lg transition-colors duration-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRequestAdmin}
+                disabled={isLoading}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white font-medium py-2.5 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+              >
+                {isLoading ? <Loader className="w-4 h-4 animate-spin" /> : <Shield className="w-4 h-4" />}
+                {isLoading ? 'Submitting...' : 'Submit Request'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
