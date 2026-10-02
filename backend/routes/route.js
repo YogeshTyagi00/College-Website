@@ -2,7 +2,6 @@ import express from 'express';
 
 import { createevents, createnews, getnews, createsociety, getsociety,signup, checkAuth, login, logout, getevents} from '../controller/controller.js';
 import { verifyToken } from '../middleware/verifyToken.js';
-import { createOrder, verifyPayment, getDonations } from '../controller/donationController.js';
 import { triggerNewsScrape } from '../controller/scraperController.js';
 import { parseAndSaveEvent, parseAndSaveSociety } from '../controller/aiParserController.js';
 import {authorizeRole} from '../middleware/authorizeRole.js';
@@ -29,8 +28,5 @@ router.post('/scrape/news', verifyToken, triggerNewsScrape);
 router.post('/ai/event', verifyToken, authorizeRole('admin'), parseAndSaveEvent);
 router.post('/ai/society', verifyToken, authorizeRole('admin'), parseAndSaveSociety);
 
-router.post('/donation/create-order', createOrder);
-router.post('/donation/verify', verifyPayment);
-router.get('/donations', verifyToken, getDonations);
 
 export default router;

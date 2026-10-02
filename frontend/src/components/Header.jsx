@@ -8,7 +8,6 @@ const navItems = [
   { label: 'News', icon: Newspaper, path: '/news', tab: 'news', color: 'from-teal-300 to-blue-400' },
   { label: 'Events', icon: Calendar, path: '/events', tab: 'events', color: 'from-yellow-300 to-amber-600' },
   { label: 'Societies', icon: Users, path: '/society', tab: 'societies', color: 'from-teal-400 to-green-400' },
-  { label: 'Donate', icon: Heart, path: '/donate', tab: 'donate', color: 'from-pink-400 to-red-400' },
 ];
 
 const Header = ({ activeTab }) => {
