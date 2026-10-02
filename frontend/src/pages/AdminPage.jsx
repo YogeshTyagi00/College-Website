@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import Header from "../components/Header.jsx";
+import { useAuthStore } from "../store/authStore.js";
 
 const API = import.meta.env.MODE === 'development' ? "http://localhost:3000/route" : "/route";
 
@@ -11,13 +12,25 @@ const tabs = [
 ];
 
 export default function AdminPage() {
+  const { user, checkAuth } = useAuthStore();
   const [activeTab, setActiveTab] = useState("event");
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(null);
 
+  // Refresh auth on mount so role is always up-to-date
+  // (e.g. superadmin just granted admin access without a re-login)
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
   const handleSubmit = async () => {
     if (!text.trim()) return toast.error("Paste some text first");
+
+    const role = user?.role;
+    if (role !== "admin" && role !== "superadmin") {
+      return toast.error("Access denied: Admin privileges required");
+    }
     setLoading(true);
     setPreview(null);
     try {
@@ -50,11 +63,10 @@ export default function AdminPage() {
             <button
               key={t.key}
               onClick={() => { setActiveTab(t.key); setPreview(null); setText(""); }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                activeTab === t.key
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === t.key
                   ? "bg-blue-600 text-white"
                   : "bg-gray-800 text-gray-400 hover:bg-gray-700"
-              }`}
+                }`}
             >
               {t.label}
             </button>

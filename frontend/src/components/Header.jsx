@@ -18,7 +18,6 @@ const Header = ({ activeTab }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isAdmin = user && ADMIN_ROLES.includes(user.role);
-  const isSuperAdmin = user?.role === 'superAdmin';
 
   const handleLogout = () => {
     logout();
@@ -39,40 +38,25 @@ const Header = ({ activeTab }) => {
             <button
               key={tab}
               onClick={() => navigate(path)}
-              className={`flex items-center px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                activeTab === tab
+              className={`flex items-center px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${activeTab === tab
                   ? `bg-gradient-to-r ${color} text-white shadow-md`
                   : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
-              }`}
+                }`}
             >
               <Icon className="w-4 h-4 mr-1.5" /> {label}
             </button>
           ))}
 
+          {/* Admin button — only visible to admin / superAdmin */}
           {isAdmin && (
             <button
               onClick={() => navigate('/admin')}
-              className={`flex items-center px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                activeTab === 'admin'
+              className={`flex items-center px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${activeTab === 'admin'
                   ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md'
                   : 'bg-gradient-to-r from-blue-400 to-purple-400 text-white hover:from-blue-500 hover:to-purple-500 shadow-sm hover:shadow-md'
-              }`}
+                }`}
             >
               <ShieldCheck className="w-4 h-4 mr-1.5" /> Admin
-            </button>
-          )}
-
-          {/* SuperAdmin button — only visible to superAdmin */}
-          {isSuperAdmin && (
-            <button
-              onClick={() => navigate('/superadmin')}
-              className={`flex items-center px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
-                activeTab === 'superadmin'
-                  ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md'
-                  : 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:from-purple-600 hover:to-indigo-600 shadow-sm hover:shadow-md'
-              }`}
-            >
-              <ShieldCheck className="w-4 h-4 mr-1.5" /> SuperAdmin
             </button>
           )}
 
@@ -100,11 +84,10 @@ const Header = ({ activeTab }) => {
             <button
               key={tab}
               onClick={() => { navigate(path); setMenuOpen(false); }}
-              className={`flex items-center px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-                activeTab === tab
+              className={`flex items-center px-4 py-3 rounded-xl text-sm font-semibold transition-all ${activeTab === tab
                   ? `bg-gradient-to-r ${color} text-white`
                   : 'text-gray-700 hover:bg-gray-100'
-              }`}
+                }`}
             >
               <Icon className="w-4 h-4 mr-2" /> {label}
             </button>
@@ -117,16 +100,6 @@ const Header = ({ activeTab }) => {
               className="flex items-center px-4 py-3 rounded-xl bg-gradient-to-r from-blue-400 to-purple-400 text-white text-sm font-semibold hover:from-blue-500 hover:to-purple-500"
             >
               <ShieldCheck className="w-4 h-4 mr-2" /> Admin Panel
-            </button>
-          )}
-
-          {/* SuperAdmin button (mobile) */}
-          {isSuperAdmin && (
-            <button
-              onClick={() => { navigate('/superadmin'); setMenuOpen(false); }}
-              className="flex items-center px-4 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 text-white text-sm font-semibold hover:from-purple-600 hover:to-indigo-600"
-            >
-              <ShieldCheck className="w-4 h-4 mr-2" /> SuperAdmin Panel
             </button>
           )}
 
