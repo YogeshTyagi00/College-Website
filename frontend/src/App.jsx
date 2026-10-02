@@ -21,6 +21,16 @@ const ProtectedRoute = ({ children }) => {
   return children;
 }
 
+// protect admin routes — must be authenticated AND have admin/superAdmin role
+const ADMIN_ROLES = ['admin', 'superAdmin'];
+const AdminRoute = ({ children }) => {
+  const { isAuthenticated, isCheckingAuth, user } = useAuthStore();
+  if (isCheckingAuth) return null;
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (!ADMIN_ROLES.includes(user?.role)) return <Navigate to="/" replace />;
+  return children;
+}
+
 //redirect to home if already authenticated
 const RedirectAuthenticatedUser = ({ children }) => {
   const { isAuthenticated, isCheckingAuth } = useAuthStore();
@@ -66,9 +76,9 @@ function App() {
           } /> 
 
           <Route path="/admin" element={
-            <ProtectedRoute>
+            <AdminRoute>
               <AdminPage />
-            </ProtectedRoute>
+            </AdminRoute>
           } />
 
           <Route path="/signup" element={

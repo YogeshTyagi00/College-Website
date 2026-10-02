@@ -37,7 +37,9 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-950 text-white">
       <Header />
       <div className="max-w-7xl mx-auto pt-20 sm:pt-24 pb-10 px-4 sm:px-6 lg:px-8">
-        <h1 className="text-2xl font-bold mb-2">Admin Panel</h1>
+        <h1 className="text-2xl font-bold mb-2">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Admin</span> Panel
+        </h1>
         <p className="text-gray-400 mb-6 text-sm">
           Paste WhatsApp text or any raw description — AI will extract and save it automatically.
         </p>

@@ -1,7 +1,7 @@
-export const authorizeRole = (role) => {
+export const authorizeRole = (...roles) => {
     return (req,res,next) => {
         try{
-            if(req.role != role){
+            if(!roles.includes(req.role)) {
                 return res.status(403).json({ message: "Forbidden access" });
             }
             next();

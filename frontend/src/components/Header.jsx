@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TrendingUp, Users, Newspaper, LogOut, Calendar, Heart, Menu, X } from 'lucide-react';
+import { TrendingUp, Users, Newspaper, LogOut, Calendar, Menu, X, ShieldCheck } from 'lucide-react';
 import { useAuthStore } from "../store/authStore.js";
 
 const navItems = [
@@ -10,10 +10,14 @@ const navItems = [
   { label: 'Societies', icon: Users, path: '/society', tab: 'societies', color: 'from-teal-400 to-green-400' },
 ];
 
+const ADMIN_ROLES = ['admin', 'superAdmin'];
+
 const Header = ({ activeTab }) => {
   const navigate = useNavigate();
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const isAdmin = user && ADMIN_ROLES.includes(user.role);
 
   const handleLogout = () => {
     logout();
@@ -43,6 +47,21 @@ const Header = ({ activeTab }) => {
               <Icon className="w-4 h-4 mr-1.5" /> {label}
             </button>
           ))}
+
+          {/* Admin button — only visible to admin / superAdmin */}
+          {isAdmin && (
+            <button
+              onClick={() => navigate('/admin')}
+              className={`flex items-center px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                activeTab === 'admin'
+                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-md'
+                  : 'bg-gradient-to-r from-blue-400 to-purple-400 text-white hover:from-blue-500 hover:to-purple-500 shadow-sm hover:shadow-md'
+              }`}
+            >
+              <ShieldCheck className="w-4 h-4 mr-1.5" /> Admin
+            </button>
+          )}
+
           <button
             onClick={handleLogout}
             className="flex items-center px-4 py-2 rounded-full bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-colors ml-2"
@@ -76,6 +95,17 @@ const Header = ({ activeTab }) => {
               <Icon className="w-4 h-4 mr-2" /> {label}
             </button>
           ))}
+
+          {/* Admin button (mobile) */}
+          {isAdmin && (
+            <button
+              onClick={() => { navigate('/admin'); setMenuOpen(false); }}
+              className="flex items-center px-4 py-3 rounded-xl bg-gradient-to-r from-blue-400 to-purple-400 text-white text-sm font-semibold hover:from-blue-500 hover:to-purple-500"
+            >
+              <ShieldCheck className="w-4 h-4 mr-2" /> Admin Panel
+            </button>
+          )}
+
           <button
             onClick={handleLogout}
             className="flex items-center px-4 py-3 rounded-xl bg-red-600 text-white text-sm font-semibold hover:bg-red-700"

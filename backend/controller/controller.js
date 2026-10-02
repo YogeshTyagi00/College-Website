@@ -143,7 +143,7 @@ export const signup = async (req, res) => {
 
         generateTokenAndSetCookie(res, newUser._id,newUser.role);
 
-        res.status(201).json({ message: "User registered successfully", user: { userName } });
+        res.status(201).json({ message: "User registered successfully", user: { userName, role: newUser.role } });
 
     } catch (error) {
         console.error("Error registering user:", error);
@@ -169,7 +169,7 @@ export const login = async (req, res) => {
 
         generateTokenAndSetCookie(res, user._id,user.role);
 
-        res.status(200).json({ message: "Login successful", user: { userName: user.userName } });
+        res.status(200).json({ message: "Login successful", user: { userName: user.userName, role: user.role } });
 
     } catch (error) {
         console.error("Error logging in:", error);
@@ -187,11 +187,11 @@ export const logout = async (req, res) => {
 }
 export const checkAuth = async (req, res) => {
     try {
-        const user = await User.findById(req.userId).select('userName');
+        const user = await User.findById(req.userId).select('userName role');
         if (!user) {    
             return res.status(404).json({ message: "User not found" });
         }
-        res.status(200).json({ isAuthenticated: true, user: { userName: user.userName } });
+        res.status(200).json({ isAuthenticated: true, user: { userName: user.userName, role: user.role } });
     } catch (error) {
         console.error("Error checking authentication:", error);
         res.status(500).json({ message: "Internal server error" });
