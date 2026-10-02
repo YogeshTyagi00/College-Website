@@ -14,6 +14,7 @@ export const verifyToken = (req, res, next) => {
             return res.status(401).json({ message: "Invalid token" });
         }
         req.userId = decoded.userId; 
+        req.role = decoded.role;
         next(); 
     } catch (error) {
         console.error("Token verification error:", error);

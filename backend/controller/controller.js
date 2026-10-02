@@ -141,7 +141,7 @@ export const signup = async (req, res) => {
 
         await newUser.save();
 
-        generateTokenAndSetCookie(res, newUser._id);
+        generateTokenAndSetCookie(res, newUser._id,newUser.role);
 
         res.status(201).json({ message: "User registered successfully", user: { userName } });
 
@@ -167,7 +167,7 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        generateTokenAndSetCookie(res, user._id);
+        generateTokenAndSetCookie(res, user._id,user.role);
 
         res.status(200).json({ message: "Login successful", user: { userName: user.userName } });
 

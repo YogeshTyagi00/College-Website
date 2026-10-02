@@ -5,6 +5,7 @@ import { verifyToken } from '../middleware/verifyToken.js';
 import { createOrder, verifyPayment, getDonations } from '../controller/donationController.js';
 import { triggerNewsScrape } from '../controller/scraperController.js';
 import { parseAndSaveEvent, parseAndSaveSociety } from '../controller/aiParserController.js';
+import {authorizeRole} from '../middleware/authorizeRole.js';
 
 const router = express.Router();
 
@@ -14,21 +15,20 @@ router.post('/signup',signup);
 router.post('/login',login); 
 router.post('/logout',logout);
 
-router.post('/news',createnews);
+router.post('/news', verifyToken, authorizeRole('admin'),createnews);
 router.get('/news',verifyToken,getnews);
 
-router.post('/events', createevents);
+router.post('/events',  verifyToken, authorizeRole('admin'),createevents);
 router.get('/events',verifyToken, getevents);
 
-router.post('/society',createsociety);
+router.post('/society', verifyToken, authorizeRole('admin'),createsociety);
 router.get('/society',verifyToken,getsociety);
 
-// Scraper route (protected — only logged in users can trigger manually)
 router.post('/scrape/news', verifyToken, triggerNewsScrape);
 
-// AI parser routes (protected)
-router.post('/ai/event', verifyToken, parseAndSaveEvent);
-router.post('/ai/society', verifyToken, parseAndSaveSociety);
+router.post('/ai/event', verifyToken, authorizeRole('admin'), parseAndSaveEvent);
+router.post('/ai/society', verifyToken, authorizeRole('admin'), parseAndSaveSociety);
+
 router.post('/donation/create-order', createOrder);
 router.post('/donation/verify', verifyPayment);
 router.get('/donations', verifyToken, getDonations);
