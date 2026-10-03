@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { User } from '../models/user.model.js';
 
-export const verifyToken = async (req, res, next) => {
+export const verifyToken = (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
@@ -16,16 +15,7 @@ export const verifyToken = async (req, res, next) => {
         }
 
         req.userId = decoded.userId;
-
-        // Fetch fresh role from DB so role changes (e.g. admin promotion)
-        // are reflected immediately without requiring re-login
-        const dbUser = await User.findById(decoded.userId).select('role');
-
-        if (!dbUser) {
-            return res.status(401).json({ message: "User not found" });
-        }
-
-        req.role = dbUser.role;
+        req.role = decoded.role;
         next();
     } catch (error) {
         console.error("Token verification error:", error);
