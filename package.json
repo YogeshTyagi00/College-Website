@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development  nodemon backend/server.js",
     "start": "cross-env NODE_ENV=production node backend/server.js",
-    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+    "test:baseline": "node load-test/load-test-baseline.js",
+    "test:current": "node load-test/load-test-current.js",
+    "test:498fda3": "node load-test/load-test-498fda3.js"
   },
   "keywords": [],
   "type": "module",
@@ -27,6 +30,7 @@
     "razorpay": "^2.9.6"
   },
   "devDependencies": {
+    "autocannon": "^8.0.0",
     "nodemon": "^3.1.10"
   }
 }
