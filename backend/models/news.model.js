@@ -33,6 +33,7 @@ const newsSchema = new mongoose.Schema({
     },
 },{timestamps: true});
 
+newsSchema.index({ category: 1, publishedAt: -1 });
 newsSchema.index({ title: 'text', content: 'text', excerpt: 'text' });
 newsSchema.index({ category: 1, featured: 1 });
 
