@@ -8,7 +8,8 @@
     "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
     "test:baseline": "node load-test/load-test-baseline.js",
     "test:current": "node load-test/load-test-current.js",
-    "test:498fda3": "node load-test/load-test-498fda3.js"
+    "test:498fda3": "node load-test/load-test-498fda3.js",
+    "test:pagination": "node load-test/load-test-pagination.js"
   },
   "keywords": [],
   "type": "module",
