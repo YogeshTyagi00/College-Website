@@ -10,21 +10,35 @@ import getImageForCategory from '../components/Image.jsx';
 const SocietyPage = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedSociety, setSelectedSociety] = useState(null);
-  const [registeredSocieties, setRegisteredSocieties] = useState(new Set()); // Keep if you still want to track registration status
-  const [activeTab, setActiveTab] = useState('societies'); // Set initial active tab to 'societies' as this is the Societies page
-
+  const [registeredSocieties, setRegisteredSocieties] = useState(new Set());
+  const [activeTab, setActiveTab] = useState('societies');
 
   const navigate = useNavigate();
 
+  const { societiesinfo: societiesData, societyPagination = { currentPage: 1, totalPages: 1, totalCount: 0, limit: 9 }, fetchSocieties, isLoading } = useAuthStore();
 
-
-  const { societiesinfo: societiesData, fetchSocieties } = useAuthStore();
+  // Reset to page 1 and re-fetch when search or category changes
   useEffect(() => {
-    fetchSocieties();
+    const timer = setTimeout(() => {
+      setCurrentPage(1);
+      fetchSocieties(1, 9, searchTerm, selectedCategory);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchTerm, selectedCategory]);
+
+  // Fetch when page changes
+  useEffect(() => {
+    fetchSocieties(currentPage, 9, searchTerm, selectedCategory);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  console.log(societiesData);
+  }, [currentPage]);
+
+  // Featured / regular split on already-server-filtered data
+  const featuredSocieties = societiesData.filter(society => society.featured);
+  const regularSocieties = societiesData.filter(society => !society.featured);
+
+  const { totalPages, totalCount } = societyPagination;
 
   // Handle society click
   const handleSocietyClick = (society) => {
@@ -50,17 +64,6 @@ const SocietyPage = () => {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [selectedSociety]);
 
-  // Filter and search functionality
-  const filteredSocieties = societiesData.filter(society => {
-    const matchesCategory = selectedCategory === 'all' || society.category === selectedCategory;
-    const matchesSearch = society.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      society.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (society.activities && society.activities.some(activity => activity.toLowerCase().includes(searchTerm.toLowerCase()))); // Added check for activities
-    return matchesCategory && matchesSearch;
-  });
-
-  const featuredSocieties = filteredSocieties.filter(society => society.featured);
-  const regularSocieties = filteredSocieties.filter(society => !society.featured);
 
   // Categories
   const categories = [
@@ -355,7 +358,7 @@ const SocietyPage = () => {
           {/* Results Counter */}
           <div className="mb-8">
             <p className="text-gray-600">
-              Showing {filteredSocieties.length} societ{filteredSocieties.length !== 1 ? 'ies' : 'y'}
+              Showing {societiesData.length} of {totalCount} societ{totalCount !== 1 ? 'ies' : 'y'}
               {selectedCategory !== 'all' && ` in ${categories.find(c => c.id === selectedCategory)?.name}`}
               {searchTerm && ` matching "${searchTerm}"`}
             </p>
@@ -385,7 +388,11 @@ const SocietyPage = () => {
           )}
 
           {/* Regular Societies */}
-          {regularSocieties.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center py-24">
+              <div className="w-12 h-12 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : regularSocieties.length > 0 ? (
             <div>
               <div className="flex items-center mb-8">
                 <h2 className="text-3xl font-bold text-gray-900">All Societies</h2>
@@ -401,6 +408,28 @@ const SocietyPage = () => {
                   />
                 ))}
               </div>
+
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-3 mt-12">
+                  <button
+                    disabled={currentPage <= 1}
+                    onClick={() => setCurrentPage(p => p - 1)}
+                    className="px-5 py-2.5 rounded-xl font-semibold border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
+                  >
+                    ← Prev
+                  </button>
+                  <span className="px-4 py-2 rounded-xl bg-gradient-to-r from-teal-600 to-green-600 text-white font-semibold shadow">
+                    {currentPage} / {totalPages}
+                  </span>
+                  <button
+                    disabled={currentPage >= totalPages}
+                    onClick={() => setCurrentPage(p => p + 1)}
+                    className="px-5 py-2.5 rounded-xl font-semibold border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
+                  >
+                    Next →
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-center py-16">

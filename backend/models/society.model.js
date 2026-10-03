@@ -61,4 +61,7 @@ const societySchema = new mongoose.Schema({
     }
 },{timestamps: true});
 
+societySchema.index({ name: 'text', description: 'text', fullDescription: 'text' });
+societySchema.index({ category: 1, featured: 1, registrationOpen: 1 });
+
 export const UserSociety = mongoose.model("Society", societySchema);

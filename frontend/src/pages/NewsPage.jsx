@@ -17,10 +17,24 @@ const NewsPage = () => {
   const { newsinfo: newsData, newsPagination, fetchNews, isLoading } = useAuthStore();
   const navigate = useNavigate();
 
+  // Reset to page 1 and re-fetch when search or category changes (debounced)
   useEffect(() => {
-    fetchNews(currentPage);
+    const timer = setTimeout(() => {
+      setCurrentPage(1);
+      fetchNews(1, 9, searchTerm, selectedCategory);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchTerm, selectedCategory]);
+
+  // Fetch when page changes
+  useEffect(() => {
+    fetchNews(currentPage, 9, searchTerm, selectedCategory);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
+
+  // Featured / regular split on already-server-filtered data
+  const featuredNews = newsData.filter(article => article.featured);
+  const regularNews = newsData.filter(article => !article.featured);
 
 
 
@@ -73,17 +87,6 @@ const NewsPage = () => {
   }, [selectedArticle]);
 
 
-  // Filter and search functionality
-  const filteredNews = newsData.filter(article => {
-    const matchesCategory = selectedCategory === 'all' || article.category === selectedCategory;
-    const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.content.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
-
-  const featuredNews = filteredNews.filter(article => article.featured);
-  const regularNews = filteredNews.filter(article => !article.featured);
 
   // Categories based on data
   const categories = [

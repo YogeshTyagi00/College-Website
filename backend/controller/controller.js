@@ -31,9 +31,23 @@ export const getnews = async (req, res) => {
         const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 9));
         const skip  = (page - 1) * limit;
 
+        const { search, category } = req.query;
+        const filter = {};
+        
+        if (search?.trim()) {
+            filter.$text = { $search: search.trim() };
+        }
+        if (category && category !== 'all') {
+            filter.category = category;
+        }
+
+        const sortBy = search?.trim()
+            ? { score: { $meta: 'textScore' }, publishedAt: -1 }
+            : { publishedAt: -1 };
+
         const [newsItems, totalCount] = await Promise.all([
-            UserNews.find().sort({ publishedAt: -1 }).skip(skip).limit(limit),
-            UserNews.countDocuments()
+            UserNews.find(filter).sort(sortBy).skip(skip).limit(limit),
+            UserNews.countDocuments(filter)
         ]);
 
         const totalPages = Math.ceil(totalCount / limit);
@@ -75,8 +89,43 @@ export const createevents = async (req, res) => {
 }
 export const getevents = async (req, res) => {
     try {
-        const eventItems = await UserEvents.find().sort({ createdAt: -1 });
-        res.status(200).json(eventItems);
+        const page = Math.max(1,parseInt(req.query.page) || 1);
+        const limit =  Math.min(50,Math.max(1,parseInt(req.query.limit) || 9));
+        const skip = (page-1)*limit;
+
+        const {search,category,featured} = req.query;
+        const filter = {};
+
+        if(search?.trim()){
+            filter.$text = {$search : search.trim()};
+        }
+        if (category && category !== 'all') {
+            filter.category = category;
+        }
+        if (featured === 'true') {
+            filter.featured = true;
+        }
+        
+        const sortBy = search?.trim()
+            ? { score: { $meta: 'textScore' }, createdAt: -1 }
+            : { createdAt: -1 };
+        const projection = search?.trim()
+            ? { score: { $meta: 'textScore' } }
+            : {};
+
+        const [eventItems, totalCount] = await Promise.all([
+            UserEvents.find(filter, projection).sort(sortBy).skip(skip).limit(limit),
+            UserEvents.countDocuments(filter)
+        ]);
+
+        res.status(200).json({
+            data: eventItems,
+            currentPage: page,
+            totalPages: Math.ceil(totalCount / limit),
+            totalCount,
+            limit,
+        });
+
     } catch (error) {
         console.error("Error fetching event items:", error);
         res.status(500).json({ message: "Internal server error" });
@@ -111,8 +160,42 @@ export const createsociety = async (req, res) => {
 }
 export const getsociety = async (req, res) => {
     try {
-        const societyItems = await UserSociety.find().sort({ createdAt: -1 });
-        res.status(200).json(societyItems);
+        const page = Math.max(1, parseInt(req.query.page) || 1);
+        const limit = Math.min(50, Math.max(1, parseInt(req.query.limit) || 9));
+        const skip = (page - 1) * limit;
+
+        const {search,category,registrationOpen } = req.query;
+        const filter = {};
+
+        if(search?.trim()){
+            filter.$text = {$search : search.trim()};
+        }
+        if (category && category !== 'all') {
+            filter.category = category;
+        }
+        if (registrationOpen  === 'true') {
+            filter.registrationOpen  = true;
+        }
+        
+        const sortBy = search?.trim()
+            ? { score: { $meta: 'textScore' }, createdAt: -1 }
+            : { createdAt: -1 };
+        const projection = search?.trim()
+            ? { score: { $meta: 'textScore' } }
+            : {};
+
+        const [societyItems, totalCount] = await Promise.all([
+            UserSociety.find(filter, projection).sort(sortBy).skip(skip).limit(limit),
+            UserSociety.countDocuments(filter)
+        ]);
+
+        res.status(200).json({
+            data: societyItems,
+            currentPage: page,
+            totalPages: Math.ceil(totalCount / limit),
+            totalCount,
+            limit,
+        });
     } catch (error) {
         console.error("Error fetching society items:", error);
         res.status(500).json({ message: "Internal server error" });

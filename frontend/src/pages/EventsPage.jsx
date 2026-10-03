@@ -10,18 +10,12 @@ import getImageForCategory from '../components/Image.jsx';
 const EventsPage = () => {
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
-    const [visibleEvents, setVisibleEvents] = useState(6);
+    const [currentPage, setCurrentPage] = useState(1);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [activeTab, setActiveTab] = useState('events');
 
-    const { eventsinfo: eventData, fetchEvents } = useAuthStore();
+    const { eventsinfo, eventPagination = { currentPage: 1, totalPages: 1, totalCount: 0, limit: 9 }, fetchEvents, isLoading } = useAuthStore();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        fetchEvents();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-    console.log(eventData);
 
     // Extract ID for React keys (handle both string and object formats)
     const getEventId = (event) => {
@@ -65,19 +59,27 @@ const EventsPage = () => {
         return () => document.removeEventListener('keydown', handleEscape);
     }, [selectedEvent]);
 
-    // Filter and search functionality for events
-    const filteredEvents = eventData.filter(event => {
-        const matchesCategory = selectedCategory === 'all' || event.category === selectedCategory;
-        const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            event.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (event.location && event.location.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            (event.organizer && event.organizer.toLowerCase().includes(searchTerm.toLowerCase()));
-        return matchesCategory && matchesSearch;
-    });
 
-   
-    const featuredEvents = filteredEvents.filter(event => event.featured === true);
-    const upcomingEvents = filteredEvents.filter(event => !event.featured); 
+    // Reset to page 1 when search or category changes, then fetch
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setCurrentPage(1);
+            fetchEvents(1, 9, searchTerm, selectedCategory);
+        }, 400);
+        return () => clearTimeout(timer);
+    }, [searchTerm, selectedCategory]);
+
+    // Fetch when page changes (but not on the first render — that's handled above)
+    useEffect(() => {
+        fetchEvents(currentPage, 9, searchTerm, selectedCategory);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentPage]);
+
+    // Featured / upcoming split on the already-server-filtered data
+    const featuredEvents = eventsinfo.filter(e => e.featured);
+    const upcomingEvents = eventsinfo.filter(e => !e.featured);
+
+    const { totalPages, totalCount } = eventPagination;
 
     // Categories for events
     const categories = [
@@ -314,7 +316,7 @@ const EventsPage = () => {
 
                     <div className="mb-8">
                         <p className="text-gray-600">
-                            Showing {filteredEvents.length} event{filteredEvents.length !== 1 ? 's' : ''}
+                            Showing {eventsinfo.length} of {totalCount} event{totalCount !== 1 ? 's' : ''}
                             {selectedCategory !== 'all' && ` in ${categories.find(c => c.id === selectedCategory)?.name}`}
                             {searchTerm && ` matching "${searchTerm}"`}
                         </p>
@@ -337,25 +339,40 @@ const EventsPage = () => {
                         </div>
                     )}
 
-                    {upcomingEvents.length > 0 ? (
+                    {isLoading ? (
+                        <div className="flex justify-center py-24">
+                            <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                        </div>
+                    ) : upcomingEvents.length > 0 ? (
                         <div>
                             <div className="flex items-center mb-8">
                                 <h2 className="text-3xl font-bold text-gray-900">Upcoming Events</h2>
                                 <div className="ml-4 h-px bg-gradient-to-r from-blue-400 to-transparent flex-1"></div>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                {upcomingEvents.slice(0, visibleEvents).map(event => (
+                                {upcomingEvents.map(event => (
                                     <EventCard key={getEventId(event)} event={event} />
                                 ))}
                             </div>
 
-                            {upcomingEvents.length > visibleEvents && (
-                                <div className="text-center mt-12">
+                            {totalPages > 1 && (
+                                <div className="flex items-center justify-center gap-3 mt-12">
                                     <button
-                                        onClick={() => setVisibleEvents(prev => prev + 6)}
-                                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105 hover:from-blue-700 hover:to-purple-700"
+                                        disabled={currentPage <= 1}
+                                        onClick={() => setCurrentPage(p => p - 1)}
+                                        className="px-5 py-2.5 rounded-xl font-semibold border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
                                     >
-                                        Load More Events
+                                        ← Prev
+                                    </button>
+                                    <span className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold shadow">
+                                        {currentPage} / {totalPages}
+                                    </span>
+                                    <button
+                                        disabled={currentPage >= totalPages}
+                                        onClick={() => setCurrentPage(p => p + 1)}
+                                        className="px-5 py-2.5 rounded-xl font-semibold border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm"
+                                    >
+                                        Next →
                                     </button>
                                 </div>
                             )}

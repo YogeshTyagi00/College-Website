@@ -12,17 +12,23 @@ export const useAuthStore = create((set) => ({
     newsinfo: [],
     newsPagination: { currentPage: 1, totalPages: 1, totalCount: 0, limit: 9 },
     societiesinfo: [],
+    societyPagination: { currentPage: 1, totalPages: 1, totalCount: 0, limit: 9 },
     eventsinfo: [],
+    eventPagination: { currentPage: 1, totalPages: 1, totalCount: 0, limit: 9 },
     isAuthenticated: false,
     isLoading: false,
     isCheckingAuth: true,
     error: null,
     message: null,
 
-    fetchNews: async (page = 1, limit = 9) => {
+    fetchNews: async (page = 1, limit = 9, search = '',category='all') => {
         set({ isLoading: true, error: null });
         try {
-            const response = await axios.get(`${API_URL}/news`, { params: { page, limit } });
+            const params = {page,limit};
+            if(search.trim()) params.search = search;
+            if(category!=='all') params.category = category;
+            
+            const response = await axios.get(`${API_URL}/news`, { params});
             // response.data = { data, currentPage, totalPages, totalCount, limit }
             set({
                 newsinfo: response.data.data,
@@ -40,24 +46,48 @@ export const useAuthStore = create((set) => ({
         }
     },
 
-    fetchSocieties: async () => {
+    fetchSocieties: async (page = 1,limit = 9, search = '', category = 'all',registrationOpen=null,featured=null) => {
         set({ isLoading: true, error: null });
         try {
-            const response = await axios.get(`${API_URL}/society`);
-            set({ societiesinfo: response.data, isLoading: false });
-            console.log(response);
+            const params = {page,limit};
+            if(search.trim()) params.search = search;
+            if(category!=='all') params.category = category;
+            
+            const response = await axios.get(`${API_URL}/society`, {params});
+            set({
+                societiesinfo: response.data.data,
+                societyPagination: {
+                    currentPage: response.data.currentPage,
+                    totalPages: response.data.totalPages,
+                    totalCount: response.data.totalCount,
+                    limit: response.data.limit,
+                },
+                isLoading: false,
+            });
         } catch (error) {
             set({ error: error.message, isLoading: false });
             throw error;
         }
     },
 
-    fetchEvents: async () => {
+    fetchEvents: async (page=1, limit=9, search='',category='all') => {
         set({ isLoading: true, error: null });
         try {
-            const response = await axios.get(`${API_URL}/events`);
-            set({ eventsinfo: response.data, isLoading: false });
-            console.log(response);
+            const params = {page,limit};
+            if(search.trim()) params.search = search;
+            if(category!=='all') params.category = category;
+
+            const response = await axios.get(`${API_URL}/events`, {params});
+            set({
+                eventsinfo: response.data.data,
+                eventPagination: {
+                    currentPage: response.data.currentPage,
+                    totalPages: response.data.totalPages,
+                    totalCount: response.data.totalCount,
+                    limit: response.data.limit,
+                },
+                isLoading: false,
+            });
         } catch (error) {
             set({ error: error.message, isLoading: false });
             throw error;

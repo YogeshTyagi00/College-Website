@@ -33,4 +33,7 @@ const newsSchema = new mongoose.Schema({
     },
 },{timestamps: true});
 
+newsSchema.index({ title: 'text', content: 'text', excerpt: 'text' });
+newsSchema.index({ category: 1, featured: 1 });
+
 export const UserNews = mongoose.model("News", newsSchema);

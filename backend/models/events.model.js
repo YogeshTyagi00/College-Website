@@ -48,4 +48,7 @@ const eventSchema = new mongoose.Schema({
     },
 },{timestamps: true});
 
+eventSchema.index({ title: 'text', description: 'text', organizer: 'text', location: 'text' });
+eventSchema.index({ category: 1, featured: 1 });
+
 export const UserEvents = mongoose.model("Events", eventSchema);
